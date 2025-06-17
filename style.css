@@ -4,7 +4,7 @@ html {
     margin: 0;
     width: 100vw;
     height: 100svh;
-    background-color: #181818;
+    background-color: #333333 !important;
     overflow: hidden;
     image-rendering: pixelated;
     display: flex;
