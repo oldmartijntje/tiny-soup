@@ -11,6 +11,8 @@ if (ctx == null) {
     throw Error("ctx is null");
 }
 
+console.log("code works!")
+
 // const mainScene = new Main({
 //     position: new Vector2(0, 0),
 // });
