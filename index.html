@@ -20,7 +20,7 @@
     </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         crossorigin="anonymous">
-  <script type="module" crossorigin src="/tiny-soup/assets/index-VYZqURoo.js"></script>
+  <script type="module" crossorigin src="/tiny-soup/assets/index-pv5EZOx9.js"></script>
   <link rel="stylesheet" crossorigin href="/tiny-soup/assets/index-DeSMm-_l.css">
 </head>
 
@@ -29,7 +29,26 @@
         <canvas id="game-canvas"></canvas>
     </div>
     <div id="homeMenu" style="display: block;">
-        <div class="modal show" tabindex="-1" style="display: block;" id="homeModal">
+        <div class="modal show" tabindex="-1" style="display: block;" id="noticeModal">
+            <div class="modal-dialog">
+                <div class="modal-content border-warning">
+                    <div class="modal-header bg-warning text-dark">
+                        <h5 class="modal-title">Work in Progress</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p>This repo is a work in progress.</p>
+                        <p>
+                            Check it out on GitHub: <a href="https://github.com/oldmartijntje/tiny-soup" target="_blank">tiny-soup repo</a><br />
+                            For updates, visit: <a href="https://oldmartijntje.nl/#/" target="_blank">oldmartijntje.nl</a>
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="document.getElementById('noticeModal').style.display='none';">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal show" tabindex="-1" style="display: none;" id="homeModal">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
