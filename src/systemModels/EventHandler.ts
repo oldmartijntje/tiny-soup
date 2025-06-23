@@ -2,10 +2,17 @@ import {EventProtocolEnum} from "../types/enum/EventProtocol.enum.ts";
 import {GameEvent} from "../types/custom/SystemTypes.ts";
 import {EventSubscriptionInterface} from "../types/interface/EventSubscriptionInterface.ts";
 import {EventReceiptInterface} from "../types/interface/EventReceipt.interface.ts";
+import {Logger} from "./Logger.ts";
 
 class EventHandler {
     private _database: EventSubscriptionInterface[] = [];
     private _nextId: number = 0;
+    private _logger: Logger<any>;
+
+    constructor() {
+        this._logger = new Logger<EventHandler>(this);
+        this._logger.LogInfo("Running constructor()")
+    }
 
     /**
      * Subscribe on an event.
@@ -33,6 +40,7 @@ class EventHandler {
             executeOnce: executeOnce,
             id: this._nextId
         }
+        this._logger.StringifyObject(receipt).PrependText("Subscription Added, receipt: ").Log()
         this._database.push({
             id: this._nextId,
             protocol: protocol,
@@ -49,10 +57,12 @@ class EventHandler {
      * @param caller
      */
     public unsubscribe(caller: object): void {
+        this._logger.Log(`${caller.constructor.name} unsubscribed from all events.`);
         this._database = this._database.filter(stored => stored.caller !== caller);
     }
 
     public cancel(id: number) {
+        this._logger.Log(`Removed subscription with the ID: ${id}`);
         this._database = this._database.filter(stored => stored.id !== id);
     }
 
@@ -62,7 +72,8 @@ class EventHandler {
      * @param error
      * @param value
      */
-    emit(protocol: EventProtocolEnum, error: boolean, value?: any): void {
+    emit(protocol: EventProtocolEnum, error: boolean = false, value?: any): void {
+        this._logger.StringifyObject(value).PrependText(`Emitted event '${protocol}', error == ${error}, with this data: `).Log()
         this._database.forEach(stored => {
             if (stored.protocol === protocol) {
                 stored.callback({
@@ -75,7 +86,6 @@ class EventHandler {
             }
         })
     }
-
 }
 
 export const events: EventHandler = new EventHandler();
