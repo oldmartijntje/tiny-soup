@@ -19,7 +19,7 @@ export abstract class GameObject {
     }
 
     // First entry point of the loop
-    stepEntry(deltaTime, root) {
+    stepEntry(deltaTime: number, root: GameObject) {
         // call the stepEntry method for all children
         this.children.forEach(child => child.stepEntry(deltaTime, root));
 
@@ -36,9 +36,9 @@ export abstract class GameObject {
     abstract onInit(): void
 
     // called once per frame
-    abstract step(_deltaTime, root): void
+    abstract step(_deltaTime: number, root: GameObject): void
 
-    public draw(ctx, x, y) {
+    public draw(ctx: CanvasRenderingContext2D, x: number, y: number) {
         const drawPosX = x + this.position.x;
         const drawPosY = y + this.position.y;
 
@@ -51,14 +51,14 @@ export abstract class GameObject {
 
     private getDrawChildrenOrdered() {
         return [...this.children].sort((a, b) => {
-            if (b.drawLayer === "FLOOR") {
+            if (b.drawLayer === DrawLayersEnum.Floor) {
                 return 1;
             }
             return a.position.y > b.position.y ? 1 : -1;
         });
     }
 
-    abstract drawImage(_ctx, _x, _y): void
+    abstract drawImage(_ctx: CanvasRenderingContext2D, _x: number, _y: number): void;
 
     public destroy() {
         this.children.forEach(child => child.destroy());
@@ -67,13 +67,13 @@ export abstract class GameObject {
         }
     }
 
-    public addChild(gameObject) {
+    public addChild(gameObject: GameObject) {
         gameObject.parent = this
         this.children.push(gameObject);
     }
 
-    public removeChild(gameObject) {
-        events.unsubscribe(gameObject);
+    public removeChild(gameObject: GameObject) {
+        // events.unsubscribe(gameObject);
         this.children = this.children.filter(child => child !== gameObject);
     }
 }
