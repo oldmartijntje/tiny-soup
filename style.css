@@ -42,16 +42,6 @@ button {
     left: 0;
 }
 
-.gameController {
-    padding: 10px;
-    font-size: 18px;
-    background: #fff;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-}
-
 @font-face {
     font-family: fontRetroGaming;
     src: url("./assets/fonts/Retro Gaming.ttf");
