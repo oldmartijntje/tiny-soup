@@ -7,11 +7,11 @@ import {Vector2} from "./Vector2.ts";
  * Anything in the game that needs support for rendering, or interactign with others, is a gameobject.
  */
 export abstract class GameObject {
-    position: Vector2;
-    children: GameObject[];
-    parent: GameObject | null;
-    hasBeenInitiated: boolean;
-    drawLayer: DrawLayersEnum | null;
+    public position: Vector2;
+    public children: GameObject[];
+    public parent: GameObject | null;
+    public hasBeenInitiated: boolean;
+    public drawLayer: DrawLayersEnum | null;
 
     protected constructor(fields: GameObjectInterface) {
         this.position = fields.position ?? new Vector2(0, 0);
@@ -57,8 +57,8 @@ export abstract class GameObject {
      * Rendering of this gameobject, and all its children.
      */
     public draw(ctx: CanvasRenderingContext2D, x: number, y: number) {
-        const drawPosX = x + this.position.getX();
-        const drawPosY = y + this.position.getY();
+        const drawPosX = x + this.position.x;
+        const drawPosY = y + this.position.y;
 
         // Do the actual rendering for Images
         this.drawImage(ctx, drawPosX, drawPosY);
@@ -75,7 +75,7 @@ export abstract class GameObject {
             if (b.drawLayer === DrawLayersEnum.Floor) {
                 return 1;
             }
-            return a.position.getY() > b.position.getY() ? 1 : -1;
+            return a.position.y > b.position.y ? 1 : -1;
         });
     }
 
