@@ -1,5 +1,6 @@
 import {DrawFunction, UpdateFunction} from "./types/custom/SystemTypes.ts";
 import {GameLoop} from "./systemModels/GameLoop.ts";
+import {Root} from "./systemModels/Root.ts";
 
 const canvas = document.querySelector("#game-canvas");
 if (canvas == null) {
@@ -16,35 +17,31 @@ if (ctx == null) {
 
 console.log("code works!")
 
-// const mainScene = new Main({
-//     position: new Vector2(0, 0),
-// });
-// mainScene.addChild(databank);
-// mainScene.setLevel(new Menu());
-// mainScene.registerMouseMovement(canvas);
-//
+const root = new Root();
+// root.addChild(databank);
+// root.setLevel(new Menu());
+// root.registerMouseMovement(canvas);
+
 const update: UpdateFunction = (deltaTime: number) => {
-    // TODO:
-    // mainScene.stepEntry(deltaTime, mainScene);
-    // mainScene.input?.update();
+    root.stepEntry(deltaTime, root);
+    // root.input?.update();
 };
 
 const draw: DrawFunction = () => {
-    // TODO:
-    // ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // mainScene.drawBackground(ctx);
-    //
-    // ctx.save();
-    //
-    // if (mainScene.camera) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    root.drawBackground(ctx);
+
+    ctx.save();
+
+    // if (root.camera) {
     //     ctx.translate(canvas.width / 2, canvas.height / 2);
-    //     ctx.scale(mainScene.camera.zoom, mainScene.camera.zoom);
-    //     ctx.translate(-canvas.width / 2 + mainScene.camera.position.x, -canvas.height / 2 + mainScene.camera.position.y);
+    //     ctx.scale(root.camera.zoom, root.camera.zoom);
+    //     ctx.translate(-canvas.width / 2 + root.camera.position.x, -canvas.height / 2 + root.camera.position.y);
     // }
-    //
-    // mainScene.drawObjects(ctx);
-    // ctx.restore();
-    // mainScene.drawForeground(ctx);
+
+    root.drawObjects(ctx);
+    ctx.restore();
+    root.drawForeground(ctx);
 };
 
 const gameLoop = new GameLoop(update, draw);

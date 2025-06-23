@@ -1,3 +1,4 @@
 export enum DrawLayersEnum {
-    Floor
+    Floor,
+    HUD
 }
