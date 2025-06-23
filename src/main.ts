@@ -30,7 +30,6 @@ const update: UpdateFunction = (deltaTime: number) => {
 const draw: DrawFunction = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     root.drawBackground(ctx);
-
     ctx.save();
 
     // if (root.camera) {

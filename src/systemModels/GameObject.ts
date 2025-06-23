@@ -2,6 +2,7 @@
 import {DrawLayersEnum} from "../types/enum/DrawLayers.enum.ts";
 import {GameObjectInterface} from "../types/interface/GameObject.Interface.ts";
 import {Vector2} from "./Vector2.ts";
+import {Logger} from "./Logger.ts";
 
 /**
  * Anything in the game that needs support for rendering, or interactign with others, is a gameobject.
@@ -12,6 +13,7 @@ export abstract class GameObject {
     public parent: GameObject | null;
     public hasBeenInitiated: boolean;
     public drawLayer: DrawLayersEnum | null;
+    private _logger: Logger<any>;
 
     protected constructor(fields?: GameObjectInterface) {
         this.position = fields?.position ?? new Vector2(0, 0);
@@ -19,6 +21,12 @@ export abstract class GameObject {
         this.hasBeenInitiated = false;
         this.drawLayer = fields?.drawLayer ?? null;
         this.parent = fields?.parent ?? null;
+        this._logger = new Logger<GameObject>(this);
+
+        queueMicrotask(() => {
+            this.onInit();
+            this.hasBeenInitiated = true;
+        });
     }
 
     /**
@@ -40,9 +48,11 @@ export abstract class GameObject {
 
     /**
      * This should implement things like subscriptions etc.
+     *
+     * Gets run right after the constructor is completed.
      */
     onInit(): void {
-
+        this._logger.LogInfo("Running onInit()");
     }
 
     /**
