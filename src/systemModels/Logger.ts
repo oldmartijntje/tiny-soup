@@ -53,7 +53,7 @@ class LogObject<T> {
     }
 
     public AppendText(text: string): LogObject<T> {
-        this.stringified = text + this.stringified;
+        this.stringified = this.stringified + text;
         return this;
     }
 }

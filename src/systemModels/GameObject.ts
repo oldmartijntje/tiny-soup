@@ -5,7 +5,7 @@ import {Vector2} from "./Vector2.ts";
 import {Logger} from "./Logger.ts";
 
 /**
- * Anything in the game that needs support for rendering, or interactign with others, is a gameobject.
+ * Anything in the game that needs support for rendering, or interacting with others, is a gameobject.
  */
 export abstract class GameObject {
     public position: Vector2;
@@ -104,6 +104,7 @@ export abstract class GameObject {
         if (this.parent) {
             this.parent.removeChild(this);
         }
+        // events.unsubscribe(gameObject);
     }
 
 
@@ -121,7 +122,6 @@ export abstract class GameObject {
      * It could become an orphan floating around in memory.
      */
     public removeChild(gameObject: GameObject) {
-        // events.unsubscribe(gameObject);
         this.children = this.children.filter(child => child !== gameObject);
     }
 }
