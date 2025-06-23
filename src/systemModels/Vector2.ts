@@ -6,26 +6,32 @@ import {gameConfig} from "../types/interface/GameConfig.interface.ts";
  * The object that handles coordinate logic.
  */
 export class Vector2 {
-    private x: number;
-    private y: number;
+    private _x: number;
+    private _y: number;
 
     constructor(x = 0, y = 0) {
-        this.x = x;
-        this.y = y;
+        this._x = x;
+        this._y = y;
     }
 
-    /**
-     * Get the X of this vector.
-     */
-    public getX(): number {
-        return this.x;
+    // Getter for x
+    public get x(): number {
+        return this._x;
     }
 
-    /**
-     * Get the Y of this vector.
-     */
-    public getY(): number {
-        return this.y;
+    // Setter for x
+    public set x(value: number) {
+        this._x = value;
+    }
+
+    // Getter for y
+    public get y(): number {
+        return this._y;
+    }
+
+    // Setter for y
+    public set y(value: number) {
+        this._y = value;
     }
 
     /**
