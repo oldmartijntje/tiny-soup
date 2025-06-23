@@ -5,7 +5,7 @@ import {Vector2} from "./Vector2.ts";
 import {Logger} from "./Logger.ts";
 
 /**
- * Anything in the game that needs support for rendering, or interactign with others, is a gameobject.
+ * Anything in the game that needs support for rendering, or interacting with others, is a gameobject.
  */
 export abstract class GameObject {
     public position: Vector2;
