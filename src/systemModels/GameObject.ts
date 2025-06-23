@@ -41,12 +41,16 @@ export abstract class GameObject {
     /**
      * This should implement things like subscriptions etc.
      */
-    abstract onInit(): void
+    onInit(): void {
+
+    }
 
     /**
-     * Called once per gametick.
+     * Called once per gametick. You can overwrite this, but it is not needed.
      */
-    abstract step(_deltaTime: number, root: GameObject): void
+    step(_deltaTime: number, _root: GameObject): void {
+
+    }
 
 
     /**
