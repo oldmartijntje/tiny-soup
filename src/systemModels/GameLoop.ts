@@ -1,4 +1,4 @@
-import {DrawFunction, UpdateFunction} from "../patterns/SystemTypes.ts";
+import {DrawFunction, UpdateFunction} from "../types/custom/SystemTypes.ts";
 
 /**
  * GameLoop is the object that handles the whole rendering logic.

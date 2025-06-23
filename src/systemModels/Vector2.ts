@@ -1,5 +1,5 @@
-import {DirectionEnum} from "../patterns/Direction.enum.ts";
-import {gameConfig} from "../patterns/GameConfig.interface.ts";
+import {DirectionEnum} from "../types/enum/Direction.enum.ts";
+import {gameConfig} from "../types/interface/GameConfig.interface.ts";
 
 
 /**

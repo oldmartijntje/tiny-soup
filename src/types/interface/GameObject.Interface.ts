@@ -1,6 +1,6 @@
-import {DrawLayersEnum} from "./DrawLayers.enum.ts";
-import {GameObject} from "../models/GameObject.ts";
-import {Vector2} from "../models/Vector2.ts";
+import {DrawLayersEnum} from "../enum/DrawLayers.enum.ts";
+import {GameObject} from "../../systemModels/GameObject.ts";
+import {Vector2} from "../../systemModels/Vector2.ts";
 
 export interface GameObjectInterface {
     position: Vector2;

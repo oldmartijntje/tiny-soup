@@ -1,5 +1,5 @@
-import {DrawFunction, UpdateFunction} from "./patterns/SystemTypes.ts";
-import {GameLoop} from "./models/GameLoop.ts";
+import {DrawFunction, UpdateFunction} from "./types/custom/SystemTypes.ts";
+import {GameLoop} from "./systemModels/GameLoop.ts";
 
 const canvas = document.querySelector("#game-canvas");
 if (canvas == null) {
