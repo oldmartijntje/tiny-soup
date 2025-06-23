@@ -2,11 +2,17 @@ import {GameObject} from "./GameObject.ts";
 import {GameObjectInterface} from "../types/interface/GameObject.Interface.ts";
 import {Vector2} from "./Vector2.ts";
 import {DrawLayersEnum} from "../types/enum/DrawLayers.enum.ts";
+import {events} from "./EventHandler.ts";
+import {EventProtocolEnum} from "../types/enum/EventProtocol.enum.ts";
 
 export class Root extends GameObject {
     constructor(fields?: GameObjectInterface) {
         super(fields);
         this.position = new Vector2(0,0);
+    }
+
+    onInit() {
+        events.emit(EventProtocolEnum.TEST, false)
     }
 
     /**
