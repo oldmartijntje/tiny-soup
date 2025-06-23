@@ -3,6 +3,9 @@ import {DrawLayersEnum} from "../patterns/DrawLayers.enum.ts";
 import {GameObjectInterface} from "../patterns/GameObject.Interface.ts";
 import {Vector2} from "./Vector2.ts";
 
+/**
+ * Anything in the game that needs support for rendering, or interactign with others, is a gameobject.
+ */
 export abstract class GameObject {
     position: Vector2;
     children: GameObject[];
@@ -18,7 +21,9 @@ export abstract class GameObject {
         this.parent = fields.parent ?? null;
     }
 
-    // First entry point of the loop
+    /**
+     * First entrypoint of the gameloop.
+     */
     stepEntry(deltaTime: number, root: GameObject) {
         // call the stepEntry method for all children
         this.children.forEach(child => child.stepEntry(deltaTime, root));
@@ -33,14 +38,23 @@ export abstract class GameObject {
         this.step(deltaTime, root);
     }
 
+    /**
+     * This should implement things like subscriptions etc.
+     */
     abstract onInit(): void
 
-    // called once per frame
+    /**
+     * Called once per gametick.
+     */
     abstract step(_deltaTime: number, root: GameObject): void
 
+
+    /**
+     * Rendering of this gameobject, and all its children.
+     */
     public draw(ctx: CanvasRenderingContext2D, x: number, y: number) {
-        const drawPosX = x + this.position.x;
-        const drawPosY = y + this.position.y;
+        const drawPosX = x + this.position.getX();
+        const drawPosY = y + this.position.getY();
 
         // Do the actual rendering for Images
         this.drawImage(ctx, drawPosX, drawPosY);
@@ -49,17 +63,28 @@ export abstract class GameObject {
         this.getDrawChildrenOrdered().forEach(child => child.draw(ctx, drawPosX, drawPosY));
     }
 
+    /**
+     * Find the correct order to draw all children.
+     */
     private getDrawChildrenOrdered() {
         return [...this.children].sort((a, b) => {
             if (b.drawLayer === DrawLayersEnum.Floor) {
                 return 1;
             }
-            return a.position.y > b.position.y ? 1 : -1;
+            return a.position.getY() > b.position.getY() ? 1 : -1;
         });
     }
 
-    abstract drawImage(_ctx: CanvasRenderingContext2D, _x: number, _y: number): void;
+    /**
+     * A method you could overwrite to draw images.
+     */
+    drawImage(_ctx: CanvasRenderingContext2D, _x: number, _y: number): void {
 
+    }
+
+    /**
+     * Destroy it and it's children.
+     */
     public destroy() {
         this.children.forEach(child => child.destroy());
         if (this.parent) {
@@ -67,13 +92,20 @@ export abstract class GameObject {
         }
     }
 
+
+    /**
+     * Add a child.
+     */
     public addChild(gameObject: GameObject) {
         gameObject.parent = this
         this.children.push(gameObject);
     }
 
-    // TODO:
-    // add events.unsubscribe call
+    /**
+     * remove the child gameobject.
+     *
+     * It could become an orphan floating around in memory.
+     */
     public removeChild(gameObject: GameObject) {
         // events.unsubscribe(gameObject);
         this.children = this.children.filter(child => child !== gameObject);
