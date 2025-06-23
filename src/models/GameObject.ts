@@ -72,6 +72,8 @@ export abstract class GameObject {
         this.children.push(gameObject);
     }
 
+    // TODO:
+    // add events.unsubscribe call
     public removeChild(gameObject: GameObject) {
         // events.unsubscribe(gameObject);
         this.children = this.children.filter(child => child !== gameObject);
