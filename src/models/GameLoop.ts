@@ -1,5 +1,10 @@
 import {DrawFunction, UpdateFunction} from "../patterns/SystemTypes.ts";
 
+/**
+ * GameLoop is the object that handles the whole rendering logic.
+ *
+ * It makes sure your FPS is stable etc.
+ */
 export class GameLoop {
     private lastFrameTime: number;
     private accumulatedTime: number;
@@ -21,7 +26,21 @@ export class GameLoop {
         this.isRunning = false;
     }
 
-    mainLoop = (timestamp: number) => {
+    /**
+     * The core game loop function, executed on each animation frame via `requestAnimationFrame`.
+     *
+     * @param {number} timestamp - The current time (in milliseconds) provided by `requestAnimationFrame`.
+     *
+     * This method:
+     * - Calculates the time elapsed (`deltaTime`) since the last frame.
+     * - Accumulates time to support fixed-timestep updates.
+     * - Runs one or more `update()` calls if enough time has accumulated.
+     * - Calls the `render()` method to draw the current state.
+     * - Schedules the next frame by calling `requestAnimationFrame` again.
+     *
+     * If `isRunning` is false, the loop stops and no further frames are requested.
+     */
+    private mainLoop = (timestamp: number) => {
         if (!this.isRunning) {
             return;
         }
@@ -46,7 +65,10 @@ export class GameLoop {
         this.rafId = requestAnimationFrame(this.mainLoop);
     }
 
-    start() {
+    /**
+     * Start the game loop.
+     */
+    public start() {
         if (this.isRunning) {
             return;
         }
@@ -54,7 +76,10 @@ export class GameLoop {
         this.rafId = requestAnimationFrame(this.mainLoop);
     }
 
-    stop() {
+    /**
+     * Stop the game loop
+     */
+    public stop() {
         if (this.rafId !== null) {
             cancelAnimationFrame(this.rafId);
             this.rafId = null;
