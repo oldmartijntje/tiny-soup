@@ -13,12 +13,12 @@ export abstract class GameObject {
     public hasBeenInitiated: boolean;
     public drawLayer: DrawLayersEnum | null;
 
-    protected constructor(fields: GameObjectInterface) {
-        this.position = fields.position ?? new Vector2(0, 0);
-        this.children = fields.children ?? [];
+    protected constructor(fields?: GameObjectInterface) {
+        this.position = fields?.position ?? new Vector2(0, 0);
+        this.children = fields?.children ?? [];
         this.hasBeenInitiated = false;
-        this.drawLayer = fields.drawLayer ?? null;
-        this.parent = fields.parent ?? null;
+        this.drawLayer = fields?.drawLayer ?? null;
+        this.parent = fields?.parent ?? null;
     }
 
     /**
