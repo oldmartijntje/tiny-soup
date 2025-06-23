@@ -1,7 +1,12 @@
+const LOGGER_LOG_DEBUG: boolean = false;
+const LOGGER_LOG_LOG: boolean = false;
+const LOGGER_LOG_WARN: boolean = false;
+const LOGGER_LOG_ERROR: boolean = false;
 export enum LogLevel {
     Info = 0,
     Warning = 1,
-    Error = 2
+    Error = 2,
+    Debug = 3
 }
 class GaslightObject {
     private readonly name: string;
@@ -47,6 +52,11 @@ class LogObject<T> {
         return this;
     }
 
+    public LogDebug(): LogObject<T> {
+        this.logger.LogDebug(this.stringified);
+        return this;
+    }
+
     public PrependText(text: string): LogObject<T> {
         this.stringified = text + this.stringified;
         return this;
@@ -83,13 +93,24 @@ export class Logger<T extends object> {
 
         switch (level) {
             case LogLevel.Info:
-                console.log(`[INFO] ${formatted}`);
+                if (LOGGER_LOG_LOG) {
+                    console.log(`[INFO] ${formatted}`);
+                }
                 break;
             case LogLevel.Warning:
-                console.warn(`[WARNING] ${formatted}`);
+                if (LOGGER_LOG_WARN) {
+                    console.warn(`[WARNING] ${formatted}`);
+                }
                 break;
             case LogLevel.Error:
-                console.error(`[ERROR] ${formatted}`);
+                if (LOGGER_LOG_ERROR) {
+                    console.error(`[ERROR] ${formatted}`);
+                }
+                break;
+            case LogLevel.Debug:
+                if (LOGGER_LOG_DEBUG) {
+                    console.log(`[DEBUG] ${formatted}`);
+                }
                 break;
         }
 
@@ -106,6 +127,10 @@ export class Logger<T extends object> {
 
     public LogInfo(message: string) {
         this.LogMessage(message, LogLevel.Info);
+    }
+
+    public LogDebug(message: string) {
+        this.LogMessage(message, LogLevel.Debug);
     }
 
     public LogWarning(message: string) {
