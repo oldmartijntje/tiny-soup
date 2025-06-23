@@ -1,17 +1,11 @@
 import {EventProtocolEnum} from "../types/enum/EventProtocol.enum.ts";
 import {GameEvent} from "../types/custom/SystemTypes.ts";
 import {EventSubscriptionInterface} from "../types/interface/EventSubscriptionInterface.ts";
-import {EventReceiptTypeEnum} from "../types/enum/EventReceiptType.enum.ts";
 import {EventReceiptInterface} from "../types/interface/EventReceipt.interface.ts";
 
 class EventHandler {
     private _database: EventSubscriptionInterface[] = [];
     private _nextId: number = 0;
-
-    constructor() {
-
-    }
-
 
     /**
      * Subscribe on an event.
@@ -24,7 +18,7 @@ class EventHandler {
     }
 
     /**
-     * Subscribe on an event, and remove it's subscription when it has been emitted once.
+     * Subscribe on an event, and remove its subscription when it has been emitted once.
      * @param protocol
      * @param caller
      * @param callback
@@ -37,8 +31,7 @@ class EventHandler {
         var receipt: EventReceiptInterface = {
             eventProtocol: protocol,
             executeOnce: executeOnce,
-            id: this._nextId,
-            receiptType: EventReceiptTypeEnum.SUBSCRIBED
+            id: this._nextId
         }
         this._database.push({
             id: this._nextId,
@@ -51,6 +44,37 @@ class EventHandler {
         return receipt;
     }
 
+    /**
+     * Remove all subscriptions from this object.
+     * @param caller
+     */
+    public unsubscribe(caller: object): void {
+        this._database = this._database.filter(stored => stored.caller !== caller);
+    }
+
+    public cancel(id: number) {
+        this._database = this._database.filter(stored => stored.id !== id);
+    }
+
+    /**
+     * Send an event to all listeners.
+     * @param protocol
+     * @param error
+     * @param value
+     */
+    emit(protocol: EventProtocolEnum, error: boolean, value?: any): void {
+        this._database.forEach(stored => {
+            if (stored.protocol === protocol) {
+                stored.callback({
+                    error: error,
+                    data: value
+                });
+                if (stored.executeOnce) {
+                    this.cancel(stored.id);
+                }
+            }
+        })
+    }
 
 }
 
