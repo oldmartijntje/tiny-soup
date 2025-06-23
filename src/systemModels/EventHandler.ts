@@ -35,7 +35,7 @@ class EventHandler {
     }
 
     private globalSubscribe(protocol: EventProtocolEnum, caller: object, callback: GameEvent, executeOnce: boolean): EventReceiptInterface {
-        var receipt: EventReceiptInterface = {
+        const receipt: EventReceiptInterface = {
             eventProtocol: protocol,
             executeOnce: executeOnce,
             id: this._nextId
