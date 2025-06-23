@@ -104,6 +104,7 @@ export abstract class GameObject {
         if (this.parent) {
             this.parent.removeChild(this);
         }
+        // events.unsubscribe(gameObject);
     }
 
 
@@ -121,7 +122,6 @@ export abstract class GameObject {
      * It could become an orphan floating around in memory.
      */
     public removeChild(gameObject: GameObject) {
-        // events.unsubscribe(gameObject);
         this.children = this.children.filter(child => child !== gameObject);
     }
 }
