@@ -13,7 +13,7 @@ export abstract class GameObject {
     public parent: GameObject | null;
     public hasBeenInitiated: boolean;
     public drawLayer: DrawLayersEnum | null;
-    private _logger: Logger<any>;
+    public _logger: Logger<any>;
 
     protected constructor(fields?: GameObjectInterface) {
         this.position = fields?.position ?? new Vector2(0, 0);

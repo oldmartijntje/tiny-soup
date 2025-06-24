@@ -2,6 +2,7 @@ import {Logger} from "./Logger.ts";
 import {RegistererRegisteredObjectInterface} from "../types/interface/RegistererRegisteredObject.interface.ts";
 import {OnRegistererClaimFunction} from "../types/custom/SystemTypes.ts";
 import {RegistererTypesEnum} from "../types/enum/RegistererTypes.enum.ts";
+import {RegistererClaimable} from "../dto/RegistererClaimable.ts";
 
 class Registerer {
     private _nextId: number = 0;
@@ -27,7 +28,29 @@ class Registerer {
         this._nextId++;
     }
 
+    public findAvailable(type: RegistererTypesEnum): RegistererClaimable[] {
+        const filtered = this._database.filter(item => item.type == type && (item.singleClaim && item.claimedBy == undefined) || !item.singleClaim);
+        const returnList: RegistererClaimable[] = [];
+        filtered.forEach((element) => {
+            returnList.push(new RegistererClaimable(element));
+        })
+        return returnList;
+    }
 
+    public claimRegisteredObject(claimer: object, claimerType: RegistererTypesEnum, claimable: RegistererClaimable): object | null {
+        const claimedItem = this._database.find(item => item.id == claimable.id);
+        if (claimedItem == null) {
+            return null;
+        }
+        if (claimedItem.singleClaim && claimedItem.claimedBy) {
+            return null;
+        }
+        if (claimedItem.singleClaim) {
+            claimedItem.claimedBy = claimer;
+        }
+        claimedItem.onUse(claimerType);
+        return claimedItem.object;
+    }
 }
 
 export const registry = new Registerer();
