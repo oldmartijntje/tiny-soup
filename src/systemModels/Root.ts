@@ -20,6 +20,7 @@ export class Root extends GameObject {
         this._logger.StringifyObject(claimables).LogDebug();
         if (claimables.length >= 1) {
             this._logger.StringifyObject(claimables[0].ClaimEntry(this, RegistererTypesEnum.ROOT_OBJECT)).LogDebug();
+            this._logger.StringifyObject(claimables[0].ClaimEntry(this, RegistererTypesEnum.ROOT_OBJECT)).LogDebug();
         }
     }
 
