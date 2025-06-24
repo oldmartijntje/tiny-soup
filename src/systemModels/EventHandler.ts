@@ -11,7 +11,7 @@ class EventHandler {
 
     constructor() {
         this._logger = new Logger<EventHandler>(this);
-        this._logger.LogInfo("Running constructor()")
+        this._logger.LogInfo("Running EventHandler()")
     }
 
     /**
