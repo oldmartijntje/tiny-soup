@@ -12,7 +12,7 @@ export class RegistererClaimable {
         return this._id;
     }
 
-    ClaimEntry(claimer: object, claimerType: RegistererTypesEnum): object | null {
+    public ClaimEntry(claimer: object, claimerType: RegistererTypesEnum): object | null {
         return registry.claimRegisteredObject(claimer, claimerType, this);
     }
 
