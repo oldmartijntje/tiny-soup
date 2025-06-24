@@ -15,7 +15,7 @@ export class Root extends GameObject {
 
     onInit() {
         events.emit(EventProtocolEnum.TEST, false)
-        registry.registerMe(this, RegistererTypesEnum.ROOT_OBJECT, false)
+        registry.registerMe(this, RegistererTypesEnum.ROOT_OBJECT, true)
         const claimables = registry.findAvailable(RegistererTypesEnum.ROOT_OBJECT);
         this._logger.StringifyObject(claimables).LogDebug();
         if (claimables.length >= 1) {
