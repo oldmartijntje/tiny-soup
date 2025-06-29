@@ -4,6 +4,25 @@ import {EventSubscriptionInterface} from "../types/interface/EventSubscriptionIn
 import {EventReceiptInterface} from "../types/interface/EventReceipt.interface.ts";
 import {Logger} from "./Logger.ts";
 
+export type EventProtocol = EventProtocolEnum | AdvancedEventProtocolInterface;
+
+const PROTECTION_KEY = "0011101000110011";
+
+interface AdvancedEventProtocolInterface {
+    text: string;
+    protocol: EventProtocolEnum;
+}
+
+function isAdvancedEventProtocolInterface(
+    p: EventProtocol
+): p is AdvancedEventProtocolInterface {
+    return (
+        typeof p === 'object' &&
+        p !== null &&
+        typeof (p as any).text === 'string'
+    );
+}
+
 class EventHandler {
     private _database: EventSubscriptionInterface[] = [];
     private _nextId: number = 0;
@@ -14,13 +33,20 @@ class EventHandler {
         this._logger.LogInfo("Running EventHandler()")
     }
 
+    public advancedEventProtocol(baseProtocol: EventProtocolEnum, customization: string): AdvancedEventProtocolInterface {
+        return {
+            protocol: baseProtocol,
+            text: customization
+        }
+    }
+
     /**
      * Subscribe on an event.
      * @param protocol
      * @param caller
      * @param callback
      */
-    public subscribe(protocol: EventProtocolEnum, caller: object, callback: GameEvent): EventReceiptInterface {
+    public subscribe(protocol: EventProtocol, caller: object, callback: GameEvent): EventReceiptInterface {
         return this.globalSubscribe(protocol, caller, callback, false);
     }
 
@@ -30,20 +56,26 @@ class EventHandler {
      * @param caller
      * @param callback
      */
-    public subscribeOnce(protocol: EventProtocolEnum, caller: object, callback: GameEvent): EventReceiptInterface {
+    public subscribeOnce(protocol: EventProtocol, caller: object, callback: GameEvent): EventReceiptInterface {
         return this.globalSubscribe(protocol, caller, callback, true);
     }
 
-    private globalSubscribe(protocol: EventProtocolEnum, caller: object, callback: GameEvent, executeOnce: boolean): EventReceiptInterface {
+    private globalSubscribe(protocol: EventProtocol, caller: object, callback: GameEvent, executeOnce: boolean): EventReceiptInterface {
+        let actualProtocol: string = "";
+        if (isAdvancedEventProtocolInterface(protocol)) {
+            actualProtocol = `${protocol.protocol}://${protocol.text}`;
+        } else {
+            actualProtocol = `${protocol}://${PROTECTION_KEY}`;
+        }
         const receipt: EventReceiptInterface = {
-            eventProtocol: protocol,
+            eventProtocol: actualProtocol,
             executeOnce: executeOnce,
             id: this._nextId
         }
         this._logger.StringifyObject(receipt).PrependText("Subscription Added, receipt: ").Log()
         this._database.push({
             id: this._nextId,
-            protocol: protocol,
+            protocol: actualProtocol,
             caller: caller,
             callback: callback,
             executeOnce: executeOnce
@@ -72,10 +104,16 @@ class EventHandler {
      * @param error
      * @param value
      */
-    emit(protocol: EventProtocolEnum, error: boolean = false, value?: any): void {
+    emit(protocol: EventProtocol, error: boolean = false, value?: any): void {
+        let actualProtocol: string = "";
+        if (isAdvancedEventProtocolInterface(protocol)) {
+            actualProtocol = `${protocol.protocol}://${protocol.text}`;
+        } else {
+            actualProtocol = `${protocol}://${PROTECTION_KEY}`;
+        }
         this._logger.StringifyObject(value).PrependText(`Emitted event '${protocol}', error == ${error}, with this data: `).Log()
         this._database.forEach(stored => {
-            if (stored.protocol === protocol) {
+            if (stored.protocol === actualProtocol) {
                 stored.callback({
                     error: error,
                     data: value
