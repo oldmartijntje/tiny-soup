@@ -111,7 +111,7 @@ class EventHandler {
         } else {
             actualProtocol = `${protocol}://${PROTECTION_KEY}`;
         }
-        this._logger.StringifyObject(value).PrependText(`Emitted event '${protocol}', error == ${error}, with this data: `).Log()
+        this._logger.StringifyObject(value).PrependText(`Emitted event '${actualProtocol}', error == ${error}, with this data: `).Log()
         this._database.forEach(stored => {
             if (stored.protocol === actualProtocol) {
                 stored.callback({

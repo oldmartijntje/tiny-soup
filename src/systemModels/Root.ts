@@ -4,8 +4,6 @@ import {Vector2} from "./Vector2.ts";
 import {DrawLayersEnum} from "../types/enum/DrawLayers.enum.ts";
 import {events} from "./EventHandler.ts";
 import {EventProtocolEnum} from "../types/enum/EventProtocol.enum.ts";
-import {registry} from "./Registerer.ts";
-import {RegistererTypesEnum} from "../types/enum/RegistererTypes.enum.ts";
 
 export class Root extends GameObject {
     constructor(fields?: GameObjectInterface) {
@@ -15,13 +13,6 @@ export class Root extends GameObject {
 
     onInit() {
         events.emit(EventProtocolEnum.TEST, false)
-        registry.registerMe(this, RegistererTypesEnum.ROOT_OBJECT, true)
-        const claimables = registry.findAvailable(RegistererTypesEnum.ROOT_OBJECT);
-        this._logger.StringifyObject(claimables).LogDebug();
-        if (claimables.length >= 1) {
-            this._logger.StringifyObject(claimables[0].ClaimEntry(this, RegistererTypesEnum.ROOT_OBJECT)).LogDebug();
-            this._logger.StringifyObject(claimables[0].ClaimEntry(this, RegistererTypesEnum.ROOT_OBJECT)).LogDebug();
-        }
     }
 
     /**
