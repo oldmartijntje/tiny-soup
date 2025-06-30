@@ -2,8 +2,6 @@ import {GameObject} from "./GameObject.ts";
 import {GameObjectInterface} from "../types/interface/GameObject.Interface.ts";
 import {Vector2} from "./Vector2.ts";
 import {DrawLayersEnum} from "../types/enum/DrawLayers.enum.ts";
-import {events} from "./EventHandler.ts";
-import {EventProtocolEnum} from "../types/enum/EventProtocol.enum.ts";
 
 export class Root extends GameObject {
     constructor(fields?: GameObjectInterface) {
@@ -12,7 +10,7 @@ export class Root extends GameObject {
     }
 
     onInit() {
-        events.emit(EventProtocolEnum.TEST, false)
+
     }
 
     /**
