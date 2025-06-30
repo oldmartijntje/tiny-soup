@@ -6,3 +6,23 @@ export function getElementByIdAndSetDisplay(document: Document, id: string, disp
     }
     return false;
 }
+
+export function addEventListener(document: Document, eventType: string, id: string, callback: EventListenerOrEventListenerObject): boolean {
+    const element = document.getElementById(id);
+    if (element) {
+        element.addEventListener(eventType, callback);
+        return true;
+    }
+    return false;
+}
+
+export function addQueryEventListeners(document: Document, eventType: string, querySelector: string, callback: EventListenerOrEventListenerObject): boolean {
+    const elements = document.querySelectorAll(querySelector);
+    if (elements) {
+        elements.forEach((element) => {
+            element.addEventListener(eventType, callback);
+        })
+        return true;
+    }
+    return false;
+}

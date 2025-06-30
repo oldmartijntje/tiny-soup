@@ -19,7 +19,8 @@ export class Root extends GameObject {
     }
 
     onInit() {
-        this._htmlRenderer.showConstructionScreen(true);
+        // this._htmlRenderer.showConstructionScreen(true);
+        this._htmlRenderer.showHomeScreen(true);
         setTimeout(() => {
             events.emit(EventProtocolEnum.ShowMobileOverlay, false, false)
         }, 1)
