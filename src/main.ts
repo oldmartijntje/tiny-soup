@@ -15,8 +15,6 @@ if (ctx == null) {
     throw Error("ctx is null");
 }
 
-console.log("code works!")
-
 const root = new Root();
 // root.addChild(databank);
 // root.setLevel(new Menu());
