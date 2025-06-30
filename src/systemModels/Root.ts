@@ -4,6 +4,10 @@ import {Vector2} from "./Vector2.ts";
 import {DrawLayersEnum} from "../types/enum/DrawLayers.enum.ts";
 
 export class Root extends GameObject {
+    _htmlRenderen: null = null;
+    _gameClient: null = null;
+    _gameLogicHandler: null = null;
+
     constructor(fields?: GameObjectInterface) {
         super(fields);
         this.position = new Vector2(0,0);
