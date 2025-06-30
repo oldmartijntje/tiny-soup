@@ -15,7 +15,7 @@ if (ctx == null) {
     throw Error("ctx is null");
 }
 
-const root = new Root();
+const root = new Root(document);
 // root.addChild(databank);
 // root.setLevel(new Menu());
 // root.registerMouseMovement(canvas);

@@ -3,19 +3,26 @@ import {Vector2} from "./Vector2.ts";
 import {DrawLayersEnum} from "../types/enum/DrawLayers.enum.ts";
 import {IGameLogicHandler} from "../types/interface/IGameLogicHandler.ts";
 import {GameObjectInterface} from "../types/dto_interface/GameObject.Interface.ts";
+import {HtmlRenderer} from "./HtmlRenderer.ts";
+import {events} from "./EventHandler.ts";
+import {EventProtocolEnum} from "../types/enum/EventProtocol.enum.ts";
 
 export class Root extends GameObject {
-    _htmlRenderen: null = null;
-    _gameClient: null = null;
-    _gameLogicHandler?: IGameLogicHandler;
+    private _htmlRenderer: HtmlRenderer;
+    private _gameClient: null = null;
+    private _gameLogicHandler?: IGameLogicHandler;
 
-    constructor(fields?: GameObjectInterface) {
+    constructor(document: Document, fields?: GameObjectInterface) {
         super(fields);
         this.position = new Vector2(0,0);
+        this._htmlRenderer = new HtmlRenderer(document);
     }
 
     onInit() {
-
+        this._htmlRenderer.showConstructionScreen(true);
+        setTimeout(() => {
+            events.emit(EventProtocolEnum.ShowMobileOverlay, false, false)
+        }, 1)
     }
 
     /**

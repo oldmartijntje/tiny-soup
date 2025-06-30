@@ -116,7 +116,7 @@ class EventHandler {
             if (stored.protocol === actualProtocol) {
                 stored.callback({
                     error: error,
-                    data: value
+                    value: value
                 });
                 if (stored.executeOnce) {
                     this.cancel(stored.id);
