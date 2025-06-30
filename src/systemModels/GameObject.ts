@@ -1,6 +1,6 @@
 // import { events } from "./Events.js";
 import {DrawLayersEnum} from "../types/enum/DrawLayers.enum.ts";
-import {GameObjectInterface} from "../types/interface/GameObject.Interface.ts";
+import {GameObjectInterface} from "../types/dto_interface/GameObject.Interface.ts";
 import {Vector2} from "./Vector2.ts";
 import {Logger} from "./Logger.ts";
 

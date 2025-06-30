@@ -1,12 +1,13 @@
 import {GameObject} from "./GameObject.ts";
-import {GameObjectInterface} from "../types/interface/GameObject.Interface.ts";
 import {Vector2} from "./Vector2.ts";
 import {DrawLayersEnum} from "../types/enum/DrawLayers.enum.ts";
+import {IGameLogicHandler} from "../types/interface/IGameLogicHandler.ts";
+import {GameObjectInterface} from "../types/dto_interface/GameObject.Interface.ts";
 
 export class Root extends GameObject {
     _htmlRenderen: null = null;
     _gameClient: null = null;
-    _gameLogicHandler: null = null;
+    _gameLogicHandler?: IGameLogicHandler;
 
     constructor(fields?: GameObjectInterface) {
         super(fields);

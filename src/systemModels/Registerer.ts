@@ -1,5 +1,5 @@
 import {Logger} from "./Logger.ts";
-import {RegistererRegisteredObjectInterface} from "../types/interface/RegistererRegisteredObject.interface.ts";
+import {RegistererRegisteredObjectInterface} from "../types/dto_interface/RegistererRegisteredObject.interface.ts";
 import {OnRegistererClaimFunction} from "../types/custom/SystemTypes.ts";
 import {RegistererTypesEnum} from "../types/enum/RegistererTypes.enum.ts";
 import {RegistererClaimable} from "../dto/RegistererClaimable.ts";

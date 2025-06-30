@@ -1,7 +1,7 @@
 import {EventProtocolEnum} from "../types/enum/EventProtocol.enum.ts";
 import {GameEvent} from "../types/custom/SystemTypes.ts";
-import {EventSubscriptionInterface} from "../types/interface/EventSubscriptionInterface.ts";
-import {EventReceiptInterface} from "../types/interface/EventReceipt.interface.ts";
+import {EventSubscriptionInterface} from "../types/dto_interface/EventSubscriptionInterface.ts";
+import {EventReceiptInterface} from "../types/dto_interface/EventReceipt.interface.ts";
 import {Logger} from "./Logger.ts";
 
 export type EventProtocol = EventProtocolEnum | AdvancedEventProtocolInterface;
