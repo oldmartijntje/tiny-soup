@@ -33,7 +33,6 @@ export class HtmlRenderer extends SystemLogic {
         });
 
         events.subscribe(EventProtocolEnum.SetUsernameValue, this, () => {
-            events.emit(EventProtocolEnum.MQTT_Broadcast, false, {topic: "openLobbies", message: memoryService.username});
             if (!getInputElementByIdAndSetValue(this._document, "usernameField", memoryService.username)) throw Error("Username Input field not defined.");
         });
 
