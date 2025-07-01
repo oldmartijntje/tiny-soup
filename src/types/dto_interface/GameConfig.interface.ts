@@ -4,9 +4,15 @@ interface MqttConfigInterface {
     topicBase: string;
 }
 
+interface StringLengthInterface {
+    min: number;
+    max: number;
+}
+
 export interface GameConfigInterface {
     gridSize: number;
-    mqttConfig: MqttConfigInterface
+    mqttConfig: MqttConfigInterface,
+    usernameLength: StringLengthInterface
 }
 
 export const gameConfig: GameConfigInterface = {
@@ -15,5 +21,9 @@ export const gameConfig: GameConfigInterface = {
         brokerUrl: "test.mosquitto.org",
         brokerPort: 8081,
         topicBase: new Date().getUTCFullYear().toString()
+    },
+    usernameLength: {
+        min: 4,
+        max: 20
     }
 }

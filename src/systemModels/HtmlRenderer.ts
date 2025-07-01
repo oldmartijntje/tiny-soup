@@ -7,6 +7,7 @@ import {events} from "../services/EventService.ts";
 import {EventProtocolEnum} from "../types/enum/EventProtocol.enum.ts";
 import {SystemLogic} from "./SystemLogic.ts";
 import {memoryService} from "../services/MemoryService.ts";
+import {gameConfig} from "../types/dto_interface/GameConfig.interface.ts";
 
 const MODALS = ["constructionModal", "homeModal", "onlineMultiplayerSelectionModal", "joinMultiplayerGameModal", "hostMultiplayerGameModal"];
 
@@ -31,6 +32,10 @@ export class HtmlRenderer extends SystemLogic {
             }
         });
 
+        events.subscribe(EventProtocolEnum.SetUsernameValue, this, () => {
+            if (!getInputElementByIdAndSetValue(this._document, "usernameField", memoryService.username)) throw Error("Username Input field not defined.");
+        });
+
         // online multiplayer gamemode button
         if (!addEventListener(this._document, "click", "gamemodeSelectButtonMultiplayerOnline", () => {
             if (!this._modalMemory["homeMenu"] || !this._modalMemory["homeModal"]) return;
@@ -38,6 +43,26 @@ export class HtmlRenderer extends SystemLogic {
             this.prepareShowingOfMenu(true);
             this._modalMemory["onlineMultiplayerSelectionModal"] = true;
             getElementByIdAndSetDisplay(this._document, "onlineMultiplayerSelectionModal", "block");
+        })) throw Error("ID does not exist.");
+
+        // username input
+        if (!addEventListener(this._document, "change", "usernameField", (event: Event) => {
+            if (!this._modalMemory["homeMenu"] || !this._modalMemory["onlineMultiplayerSelectionModal"]) return;
+            const target = event.target as HTMLInputElement;
+            let username = target.value;
+            // Truncate if too long
+            if (username.length > gameConfig.usernameLength.max) {
+                username = username.substring(0, gameConfig.usernameLength.max);
+            }
+            // Add random digits if too short
+            if (username.length < gameConfig.usernameLength.min) {
+                const chars = '0123456789';
+                while (username.length < gameConfig.usernameLength.min) {
+                    username += chars[Math.floor(Math.random() * chars.length)];
+                }
+            }
+            memoryService.username = username;
+            events.emit(EventProtocolEnum.SetUsernameValue, false, username);
         })) throw Error("ID does not exist.");
 
         // host online multiplayer gamemode button
@@ -83,7 +108,8 @@ export class HtmlRenderer extends SystemLogic {
             this.showHomeScreen(true);
         })) throw Error("Unknown error, investigate me!");
 
-        if (!getInputElementByIdAndSetValue(this._document, "usernameField", memoryService.username)) throw Error("Username Input field not defined.");
+        // set the generated username.
+        events.emit(EventProtocolEnum.SetUsernameValue, false, memoryService.username);
     }
 
     private setMobileOverlay(show: boolean = true) {
