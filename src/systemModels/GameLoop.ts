@@ -1,11 +1,12 @@
 import {DrawFunction, UpdateFunction} from "../types/custom/SystemTypes.ts";
+import {GameLogic} from "./GameLogic.ts";
 
 /**
  * GameLoop is the object that handles the whole rendering logic.
  *
  * It makes sure your FPS is stable etc.
  */
-export class GameLoop {
+export class GameLoop extends GameLogic {
     private lastFrameTime: number;
     private accumulatedTime: number;
     private timeStep: number;
@@ -14,7 +15,7 @@ export class GameLoop {
     private isRunning: boolean;
     private rafId: number | null;
     constructor(update: UpdateFunction, render: DrawFunction) {
-
+        super();
         this.lastFrameTime = 0;
         this.accumulatedTime = 0;
         this.timeStep = 1000 / 60; // 60 fps

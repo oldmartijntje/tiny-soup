@@ -1,11 +1,11 @@
 import {addEventListener, addQueryEventListeners, getElementByIdAndSetDisplay} from "../helpers/HtmlHelpers.ts";
 import {events} from "./EventHandler.ts";
 import {EventProtocolEnum} from "../types/enum/EventProtocol.enum.ts";
-import {GameObject} from "./GameObject.ts";
+import {GameLogic} from "./GameLogic.ts";
 
 const MODALS = ["constructionModal", "homeModal", "onlineMultiplayerSelectionModal", "joinMultiplayerGameModal", "hostMultiplayerGameModal"];
 
-export class HtmlRenderer extends GameObject{
+export class HtmlRenderer extends GameLogic {
     private _document: Document;
     private _modalMemory: { [id: string] : boolean; } = {};
 

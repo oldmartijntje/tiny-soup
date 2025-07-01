@@ -1,16 +1,15 @@
-import {Logger} from "./Logger.ts";
 import {RegistererRegisteredObjectInterface} from "../types/dto_interface/RegistererRegisteredObject.interface.ts";
 import {OnRegistererClaimFunction} from "../types/custom/SystemTypes.ts";
 import {RegistererTypesEnum} from "../types/enum/RegistererTypes.enum.ts";
 import {RegistererClaimable} from "../dto/RegistererClaimable.ts";
+import {GameLogic} from "./GameLogic.ts";
 
-class Registerer {
+class Registerer extends GameLogic {
     private _nextId: number = 0;
-    private _logger: Logger<any>;
     private _database: RegistererRegisteredObjectInterface[] = [];
 
     constructor() {
-        this._logger = new Logger<Registerer>(this);
+        super();
         this._logger.LogInfo("Running Registerer()")
     }
 
