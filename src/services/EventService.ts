@@ -2,7 +2,7 @@ import {EventProtocolEnum} from "../types/enum/EventProtocol.enum.ts";
 import {GameEvent} from "../types/custom/SystemTypes.ts";
 import {EventSubscriptionInterface} from "../types/dto_interface/EventSubscriptionInterface.ts";
 import {EventReceiptInterface} from "../types/dto_interface/EventReceipt.interface.ts";
-import {Logger} from "./Logger.ts";
+import {Logger} from "../systemModels/Logger.ts";
 
 export type EventProtocol = EventProtocolEnum | AdvancedEventProtocolInterface;
 
@@ -23,13 +23,13 @@ function isAdvancedEventProtocolInterface(
     );
 }
 
-class EventHandler {
+class EventService {
     private _database: EventSubscriptionInterface[] = [];
     private _nextId: number = 0;
     private _logger: Logger<any>;
 
     constructor() {
-        this._logger = new Logger<EventHandler>(this);
+        this._logger = new Logger<EventService>(this);
         this._logger.LogInfo("Running EventHandler()")
     }
 
@@ -126,4 +126,4 @@ class EventHandler {
     }
 }
 
-export const events: EventHandler = new EventHandler();
+export const events: EventService = new EventService();

@@ -4,7 +4,7 @@ import {DrawLayersEnum} from "../types/enum/DrawLayers.enum.ts";
 import {IGameLogicHandler} from "../types/interface/IGameLogicHandler.ts";
 import {GameObjectInterface} from "../types/dto_interface/GameObject.Interface.ts";
 import {HtmlRenderer} from "./HtmlRenderer.ts";
-import {events} from "./EventHandler.ts";
+import {events} from "../services/EventService.ts";
 import {EventProtocolEnum} from "../types/enum/EventProtocol.enum.ts";
 
 export class Root extends GameObject {

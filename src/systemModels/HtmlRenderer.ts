@@ -1,5 +1,5 @@
 import {addEventListener, addQueryEventListeners, getElementByIdAndSetDisplay} from "../helpers/HtmlHelpers.ts";
-import {events} from "./EventHandler.ts";
+import {events} from "../services/EventService.ts";
 import {EventProtocolEnum} from "../types/enum/EventProtocol.enum.ts";
 import {GameLogic} from "./GameLogic.ts";
 

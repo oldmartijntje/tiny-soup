@@ -1,5 +1,5 @@
 import {Logger} from "./Logger.ts";
-import {events} from "./EventHandler.ts";
+import {events} from "../services/EventService.ts";
 
 /**
  * A gamelogic object is meant to be used on every class to make sure it is functional with all standards
