@@ -2,10 +2,10 @@ import {SystemLogic} from "../systemModels/SystemLogic.ts";
 import {getRandomFiveCharNumber} from "../helpers/RandomisationHelper.ts";
 
 export interface LobbySettings {
-    isActive: boolean;
-    lobbyIdentifier: string;
-    discoverable: boolean;
-    discoverableLobbyIdentifier: string;
+    isActive: boolean; // whether this model is actually used.
+    lobbyIdentifier: string; // the id you can enter in the join menu.
+    discoverable: boolean; // whether you listen to `discoverableLobbyIdentifier` or not
+    discoverableLobbyIdentifier: string; // the id that is discoverable
 }
 
 class MemoryService extends SystemLogic {
