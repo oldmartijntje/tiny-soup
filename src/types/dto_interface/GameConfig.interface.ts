@@ -26,7 +26,7 @@ export const gameConfig: GameConfigInterface = {
     mqttConfig: {
         brokerUrl: "test.mosquitto.org",
         brokerPort: 8081,
-        topicBase: new Date().getUTCFullYear().toString()
+        topicBase: new Date().getUTCFullYear().toString() + "protocol."
     },
     usernameLength: {
         min: 4,

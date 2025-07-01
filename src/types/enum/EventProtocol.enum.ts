@@ -10,5 +10,6 @@ export enum EventProtocolEnum {
     MQTT_SubscribeToTopic= 5,
     MQTT_UnSubscribe= 6,
     MQTT_MESSAGE = 7,
-    SetUsernameValue = 8
+    MQTT_Broadcast = 8,
+    SetUsernameValue = 9
 }
