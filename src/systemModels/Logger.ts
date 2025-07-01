@@ -1,6 +1,8 @@
-const LOGGER_LOG: boolean = true;
-const LOGGER_LOG_LOG: boolean = true;
-const LOGGER_LOG_DEBUG: boolean = true;
+import {gameConfig, ViteRunningMode} from "../types/dto_interface/GameConfig.interface.ts";
+
+const LOGGER_LOG: boolean = gameConfig.mode === ViteRunningMode.Development;
+const LOGGER_LOG_LOG: boolean = gameConfig.mode === ViteRunningMode.Development;
+const LOGGER_LOG_DEBUG: boolean = gameConfig.mode === ViteRunningMode.Development;
 const LOGGER_LOG_WARN: boolean = true;
 const LOGGER_LOG_ERROR: boolean = true;
 export enum LogLevel {
@@ -64,12 +66,12 @@ class LogObject<T> {
         return this;
     }
 
-    public PrependText(text: string): LogObject<T> {
+    public PrependText(text: string = "Hello World! "): LogObject<T> {
         this.stringified = text + this.stringified;
         return this;
     }
 
-    public AppendText(text: string): LogObject<T> {
+    public AppendText(text: string = " Hello World!"): LogObject<T> {
         this.stringified = this.stringified + text;
         return this;
     }
@@ -137,23 +139,23 @@ export class Logger<T extends object> {
 
     }
 
-    public LogInfo(message: string) {
+    public LogInfo(message: string = "Hello World!") {
         this.LogMessage(message, LogLevel.Info);
     }
 
-    public LogDebug(message: string) {
+    public LogDebug(message: string = "Hello World!") {
         this.LogMessage(message, LogLevel.Debug);
     }
 
-    public Log(message: string) {
+    public Log(message: string = "Hello World!") {
         this.LogMessage(message, LogLevel.Log);
     }
 
-    public LogWarning(message: string) {
+    public LogWarning(message: string = "Hello World!") {
         this.LogMessage(message, LogLevel.Warning);
     }
 
-    public LogError(message: string) {
+    public LogError(message: string = "Hello World!") {
         this.LogMessage(message, LogLevel.Error);
     }
 }

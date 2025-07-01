@@ -1,32 +1,26 @@
 // import { events } from "./Events.js";
 import {DrawLayersEnum} from "../types/enum/DrawLayers.enum.ts";
-import {GameObjectInterface} from "../types/interface/GameObject.Interface.ts";
+import {GameObjectInterface} from "../types/dto_interface/GameObject.Interface.ts";
 import {Vector2} from "./Vector2.ts";
-import {Logger} from "./Logger.ts";
+import {SystemLogic} from "./SystemLogic.ts";
+import {Destroyable} from "./Destroyable.ts";
+import {events} from "../services/EventService.ts";
 
 /**
  * Anything in the game that needs support for rendering, or interacting with others, is a gameobject.
  */
-export abstract class GameObject {
+export abstract class GameObject extends SystemLogic implements Destroyable {
     public position: Vector2;
     public children: GameObject[];
     public parent: GameObject | null;
-    public hasBeenInitiated: boolean;
     public drawLayer: DrawLayersEnum | null;
-    private _logger: Logger<any>;
 
-    protected constructor(fields?: GameObjectInterface) {
+    constructor(fields?: GameObjectInterface) {
+        super();
         this.position = fields?.position ?? new Vector2(0, 0);
         this.children = fields?.children ?? [];
-        this.hasBeenInitiated = false;
         this.drawLayer = fields?.drawLayer ?? null;
         this.parent = fields?.parent ?? null;
-        this._logger = new Logger<GameObject>(this);
-
-        queueMicrotask(() => {
-            this.onInit();
-            this.hasBeenInitiated = true;
-        });
     }
 
     /**
@@ -46,14 +40,7 @@ export abstract class GameObject {
         this.step(deltaTime, root);
     }
 
-    /**
-     * This should implement things like subscriptions etc.
-     *
-     * Gets run right after the constructor is completed.
-     */
-    onInit(): void {
-        this._logger.LogInfo("Running onInit()");
-    }
+
 
     /**
      * Called once per gametick. You can overwrite this, but it is not needed.
@@ -104,7 +91,7 @@ export abstract class GameObject {
         if (this.parent) {
             this.parent.removeChild(this);
         }
-        // events.unsubscribe(gameObject);
+        events.unsubscribe(this);
     }
 
 
