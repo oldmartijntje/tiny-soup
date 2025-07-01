@@ -4,6 +4,11 @@ interface MqttConfigInterface {
     topicBase: string;
 }
 
+enum ViteRunningMode {
+    Production = 0,
+    Development = 1
+}
+
 interface StringLengthInterface {
     min: number;
     max: number;
@@ -12,7 +17,8 @@ interface StringLengthInterface {
 export interface GameConfigInterface {
     gridSize: number;
     mqttConfig: MqttConfigInterface,
-    usernameLength: StringLengthInterface
+    usernameLength: StringLengthInterface,
+    mode: ViteRunningMode
 }
 
 export const gameConfig: GameConfigInterface = {
@@ -25,5 +31,6 @@ export const gameConfig: GameConfigInterface = {
     usernameLength: {
         min: 4,
         max: 20
-    }
+    },
+    mode: import.meta.env.PROD ? ViteRunningMode.Development : ViteRunningMode.Production
 }
