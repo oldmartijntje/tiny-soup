@@ -2,9 +2,9 @@ import {RegistererRegisteredObjectInterface} from "../types/dto_interface/Regist
 import {OnRegistererClaimFunction} from "../types/custom/SystemTypes.ts";
 import {RegistererTypesEnum} from "../types/enum/RegistererTypes.enum.ts";
 import {RegistererClaimable} from "../dto/RegistererClaimable.ts";
-import {GameLogic} from "./GameLogic.ts";
+import {SystemLogic} from "./SystemLogic.ts";
 
-class Registerer extends GameLogic {
+class Registerer extends SystemLogic {
     private _nextId: number = 0;
     private _database: RegistererRegisteredObjectInterface[] = [];
 

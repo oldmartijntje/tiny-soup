@@ -1,12 +1,12 @@
 import {DrawFunction, UpdateFunction} from "../types/custom/SystemTypes.ts";
-import {GameLogic} from "./GameLogic.ts";
+import {SystemLogic} from "./SystemLogic.ts";
 
 /**
  * GameLoop is the object that handles the whole rendering logic.
  *
  * It makes sure your FPS is stable etc.
  */
-export class GameLoop extends GameLogic {
+export class GameLoop extends SystemLogic {
     private lastFrameTime: number;
     private accumulatedTime: number;
     private timeStep: number;

@@ -2,12 +2,12 @@ import {Logger} from "./Logger.ts";
 /**
  * A gamelogic object is meant to be used on every class to make sure it is functional with all standards
  */
-export class GameLogic {
+export class SystemLogic {
     public _logger: Logger<any>;
     public hasBeenInitiated: boolean;
 
     constructor() {
-        this._logger = new Logger<GameLogic>(this);
+        this._logger = new Logger<SystemLogic>(this);
         this.hasBeenInitiated = false;
 
         queueMicrotask(() => {

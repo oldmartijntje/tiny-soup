@@ -2,14 +2,14 @@
 import {DrawLayersEnum} from "../types/enum/DrawLayers.enum.ts";
 import {GameObjectInterface} from "../types/dto_interface/GameObject.Interface.ts";
 import {Vector2} from "./Vector2.ts";
-import {GameLogic} from "./GameLogic.ts";
+import {SystemLogic} from "./SystemLogic.ts";
 import {Destroyable} from "./Destroyable.ts";
 import {events} from "../services/EventService.ts";
 
 /**
  * Anything in the game that needs support for rendering, or interacting with others, is a gameobject.
  */
-export abstract class GameObject extends GameLogic implements Destroyable {
+export abstract class GameObject extends SystemLogic implements Destroyable {
     public position: Vector2;
     public children: GameObject[];
     public parent: GameObject | null;
