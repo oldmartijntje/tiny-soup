@@ -76,6 +76,7 @@ export class HtmlRenderer extends SystemLogic {
                 isActive: true, lobbyIdentifier: getRandomAlphaNumString(5),
                 discoverable: false, discoverableLobbyIdentifier: getRandomAlphaNumString(10)
             });
+            events.emit(EventProtocolEnum.HostLobby, false, memoryService.getLobby());
             if (!getElementByIdAndSetInnerHTML(this._document, "lobbyHostId", memoryService.getLobby().lobbyIdentifier)) throw Error("Lobby host id element not defined.");
             getElementByIdAndSetDisplay(this._document, "hostMultiplayerGameModal", "block");
         })) throw Error("ID does not exist.");

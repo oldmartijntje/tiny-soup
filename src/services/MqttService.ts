@@ -1,5 +1,5 @@
 // @ts-ignore
-import mqtt, {MqttClient, ClientSubscribeCallback, ISubscriptionGrant} from 'mqtt';
+import mqtt, {ClientSubscribeCallback, ISubscriptionGrant, MqttClient} from 'mqtt';
 import {GameService} from "../systemModels/GameService.ts";
 import {SystemLogic} from "../systemModels/SystemLogic.ts";
 import {gameConfig} from "../types/dto_interface/GameConfig.interface.ts";
@@ -65,6 +65,7 @@ export class MqttService extends SystemLogic implements GameService {
             if (typeof data.value == typeof {}) {
                 try {
                     var broadcast = data.value as MqttBroadcastInterface;
+                    broadcast.topic = broadcast.topic.substring(gameConfig.mqttConfig.topicBase.length);
                     this.publishMessage(broadcast.topic, broadcast.message);
                 } catch (e) {
                     this._logger.StringifyObject(e).PrependText("Failed to parse MQTT message").LogError();
@@ -94,8 +95,8 @@ export class MqttService extends SystemLogic implements GameService {
     }
 
     private onReceivedMessage(topic: string, message: string): void {
-        // Add message handling logic here
-        this._logger.LogInfo(`Message received on ${topic}: ${message}`);
+        this._logger.LogInfo(`Received ${topic} topic: ${message}`);
+        events.emit(EventProtocolEnum.MQTT_MESSAGE_RECEIVED, false, { topic, message });
     }
 
     public unsubscribeFromTopic(topic: string): void {

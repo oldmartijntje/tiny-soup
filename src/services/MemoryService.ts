@@ -9,7 +9,8 @@ export interface LobbySettingsInterface {
 }
 
 export interface LobbyInfoInterface {
-
+    identifier: string;
+    lastPing: Date;
 }
 
 class MemoryService extends SystemLogic {
@@ -46,6 +47,10 @@ class MemoryService extends SystemLogic {
 
     public getConnData(): ConnectionData {
         return this._connectionData;
+    }
+
+    public getDiscovery(): LobbyInfoInterface[] {
+        return this._connectionData.getDiscoveryLobbyInfo();
     }
 
     // Getter for username

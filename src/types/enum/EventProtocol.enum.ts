@@ -9,7 +9,11 @@ export enum EventProtocolEnum {
     SelectMultiplayerModus = 4,
     MQTT_SubscribeToTopic= 5,
     MQTT_UnSubscribe= 6,
-    MQTT_MESSAGE = 7,
+    MQTT_MESSAGE_RECEIVED = 7,
     MQTT_Broadcast = 8,
-    SetUsernameValue = 9
+    SetUsernameValue = 9,
+    HostLobby = 10,
+    JoinLobby = 11,
+    DisconnectLobby = 12,
+    CloseLobby = 13
 }
