@@ -1,8 +1,5 @@
-import {GameLogic} from "./GameLogic.ts";
-
-export class GameService extends GameLogic{
+export class GameService {
     constructor() {
-        super();
 
     }
 }

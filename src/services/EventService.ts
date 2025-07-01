@@ -3,6 +3,7 @@ import {GameEvent} from "../types/custom/SystemTypes.ts";
 import {EventSubscriptionInterface} from "../types/dto_interface/EventSubscriptionInterface.ts";
 import {EventReceiptInterface} from "../types/dto_interface/EventReceipt.interface.ts";
 import {GameService} from "../systemModels/GameService.ts";
+import {GameLogic} from "../systemModels/GameLogic.ts";
 
 export type EventProtocol = EventProtocolEnum | AdvancedEventProtocolInterface;
 
@@ -23,7 +24,7 @@ function isAdvancedEventProtocolInterface(
     );
 }
 
-class EventService extends GameService {
+class EventService extends GameLogic implements GameService {
     private _database: EventSubscriptionInterface[] = [];
     private _nextId: number = 0;
 

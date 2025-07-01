@@ -1,6 +1,4 @@
 import {Logger} from "./Logger.ts";
-import {events} from "../services/EventService.ts";
-
 /**
  * A gamelogic object is meant to be used on every class to make sure it is functional with all standards
  */
@@ -27,10 +25,5 @@ export class GameLogic {
         this._logger.LogInfo("Running onInit()");
     }
 
-    /**
-     * Destroy it.
-     */
-    public destroy() {
-        events.unsubscribe(this);
-    }
+
 }

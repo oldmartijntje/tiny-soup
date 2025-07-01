@@ -64,12 +64,12 @@ class LogObject<T> {
         return this;
     }
 
-    public PrependText(text: string): LogObject<T> {
+    public PrependText(text: string = "Hello World! "): LogObject<T> {
         this.stringified = text + this.stringified;
         return this;
     }
 
-    public AppendText(text: string): LogObject<T> {
+    public AppendText(text: string = " Hello World!"): LogObject<T> {
         this.stringified = this.stringified + text;
         return this;
     }
@@ -137,23 +137,23 @@ export class Logger<T extends object> {
 
     }
 
-    public LogInfo(message: string) {
+    public LogInfo(message: string = "Hello World!") {
         this.LogMessage(message, LogLevel.Info);
     }
 
-    public LogDebug(message: string) {
+    public LogDebug(message: string = "Hello World!") {
         this.LogMessage(message, LogLevel.Debug);
     }
 
-    public Log(message: string) {
+    public Log(message: string = "Hello World!") {
         this.LogMessage(message, LogLevel.Log);
     }
 
-    public LogWarning(message: string) {
+    public LogWarning(message: string = "Hello World!") {
         this.LogMessage(message, LogLevel.Warning);
     }
 
-    public LogError(message: string) {
+    public LogError(message: string = "Hello World!") {
         this.LogMessage(message, LogLevel.Error);
     }
 }
