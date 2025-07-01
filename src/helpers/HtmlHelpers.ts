@@ -44,3 +44,12 @@ export function getInputElementByIdAndSetValue(document: Document, id: string, v
     }
     return false;
 }
+
+export function setCheckboxCheckedById(document: Document, id: string, checked: boolean): boolean {
+    const element = document.getElementById(id);
+    if (element && element instanceof HTMLInputElement && element.type === 'checkbox') {
+        element.checked = checked;
+        return true;
+    }
+    return false;
+}

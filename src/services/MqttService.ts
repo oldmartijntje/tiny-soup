@@ -65,7 +65,6 @@ export class MqttService extends SystemLogic implements GameService {
             if (typeof data.value == typeof {}) {
                 try {
                     var broadcast = data.value as MqttBroadcastInterface;
-                    broadcast.topic = broadcast.topic.substring(gameConfig.mqttConfig.topicBase.length);
                     this.publishMessage(broadcast.topic, broadcast.message);
                 } catch (e) {
                     this._logger.StringifyObject(e).PrependText("Failed to parse MQTT message").LogError();
@@ -96,6 +95,7 @@ export class MqttService extends SystemLogic implements GameService {
 
     private onReceivedMessage(topic: string, message: string): void {
         this._logger.LogInfo(`Received ${topic} topic: ${message}`);
+        topic = topic.substring(gameConfig.mqttConfig.topicBase.length);
         events.emit(EventProtocolEnum.MQTT_MESSAGE_RECEIVED, false, { topic, message });
     }
 

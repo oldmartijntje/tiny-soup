@@ -35,9 +35,20 @@ export class LobbySystem extends SystemLogic implements Destroyable {
 
     onInit() {
         events.subscribe(EventProtocolEnum.HostLobby, this, ()=> {
-            // @ts-ignore
-            const lobby = memoryService.getDiscovery();
-
+            const lobby = memoryService.getLobby()
+            if (!lobby.isActive) {
+                return;
+            }
+            if (lobby.discoverable) {
+                const mqttMessage: MQTT_LobbyAnnouncementInterface = {
+                    identifier: lobby.discoverableLobbyIdentifier
+                }
+                const message: MqttBroadcastInterface = {
+                    topic: MqttTopics.LOBBY_DISCOVERY,
+                    message: JSON.stringify(mqttMessage),
+                }
+                events.emit(EventProtocolEnum.MQTT_Broadcast, false, message)
+            }
         });
 
         events.subscribe(EventProtocolEnum.MQTT_MESSAGE_RECEIVED, this, (data)=> {
@@ -47,6 +58,9 @@ export class LobbySystem extends SystemLogic implements Destroyable {
                     if (broadcast.topic == MqttTopics.LOBBY_DISCOVERY) {
                         const message = parseMqttLobbyAnnouncement(broadcast.message);
                         if (message == undefined) {
+                            return;
+                        }
+                        if (message.identifier == memoryService.getLobby().discoverableLobbyIdentifier) {
                             return;
                         }
 

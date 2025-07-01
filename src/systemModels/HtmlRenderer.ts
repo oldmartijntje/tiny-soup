@@ -1,7 +1,7 @@
 import {
     addEventListener,
     addQueryEventListeners,
-    getElementByIdAndSetDisplay, getElementByIdAndSetInnerHTML, getInputElementByIdAndSetValue
+    getElementByIdAndSetDisplay, getElementByIdAndSetInnerHTML, getInputElementByIdAndSetValue, setCheckboxCheckedById
 } from "../helpers/HtmlHelpers.ts";
 import {events} from "../services/EventService.ts";
 import {EventProtocolEnum} from "../types/enum/EventProtocol.enum.ts";
@@ -77,9 +77,22 @@ export class HtmlRenderer extends SystemLogic {
                 discoverable: false, discoverableLobbyIdentifier: getRandomAlphaNumString(10)
             });
             events.emit(EventProtocolEnum.HostLobby, false, memoryService.getLobby());
+            if (!setCheckboxCheckedById(this._document, "discoverySetting", false)) throw Error("Lobby host id element not defined.")
             if (!getElementByIdAndSetInnerHTML(this._document, "lobbyHostId", memoryService.getLobby().lobbyIdentifier)) throw Error("Lobby host id element not defined.");
             getElementByIdAndSetDisplay(this._document, "hostMultiplayerGameModal", "block");
         })) throw Error("ID does not exist.");
+
+        // online discovery checkbox
+        if (!addEventListener(this._document, "change", "discoverySetting", (event: Event) => {
+            if (!this._modalMemory["homeMenu"] || !this._modalMemory["hostMultiplayerGameModal"]) return;
+            const target = event.target as HTMLInputElement;
+            let value = target.checked;
+            this._logger.LogInfo(`${value}`);
+            const lobby = memoryService.getLobby();
+            lobby.discoverable = value;
+            memoryService.setLobby(lobby);
+            events.emit(EventProtocolEnum.HostLobby, false, memoryService.getLobby());
+        })) throw Error("discoverySetting does not exist.");
 
         // join online multiplayer gamemode button
         if (!addEventListener(this._document, "click", "onlineGameSelectJoinMode", () => {
