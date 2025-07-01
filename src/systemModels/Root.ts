@@ -12,6 +12,7 @@ export class Root extends GameObject {
     private _htmlRenderer: HtmlRenderer;
     private _gameClient: null = null;
     private _gameLogicHandler?: IGameLogicHandler;
+    // @ts-ignore
     private _mqttService: MqttService;
 
     constructor(document: Document, fields?: GameObjectInterface) {
