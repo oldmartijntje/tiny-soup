@@ -1,7 +1,7 @@
 import {GameObject} from "./GameObject.ts";
 import {Vector2} from "./Vector2.ts";
 import {DrawLayersEnum} from "../types/enum/DrawLayers.enum.ts";
-import {IGameLogicHandler} from "../types/interface/IGameLogicHandler.ts";
+// import {IGameLogicHandler} from "../types/interface/IGameLogicHandler.ts";
 import {GameObjectInterface} from "../types/dto_interface/GameObject.Interface.ts";
 import {HtmlRenderer} from "./HtmlRenderer.ts";
 import {events} from "../services/EventService.ts";
@@ -11,8 +11,8 @@ import {gameConfig, ViteRunningMode} from "../types/dto_interface/GameConfig.int
 
 export class Root extends GameObject {
     private _htmlRenderer: HtmlRenderer;
-    private _gameClient: null = null;
-    private _gameLogicHandler?: IGameLogicHandler;
+    // private _gameClient: null = null;
+    // private _gameLogicHandler?: IGameLogicHandler;
     // @ts-ignore
     private _mqttService: MqttService;
 
