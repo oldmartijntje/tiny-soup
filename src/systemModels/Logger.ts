@@ -1,6 +1,8 @@
-const LOGGER_LOG: boolean = true;
-const LOGGER_LOG_LOG: boolean = true;
-const LOGGER_LOG_DEBUG: boolean = true;
+import {gameConfig, ViteRunningMode} from "../types/dto_interface/GameConfig.interface.ts";
+
+const LOGGER_LOG: boolean = gameConfig.mode === ViteRunningMode.Development;
+const LOGGER_LOG_LOG: boolean = gameConfig.mode === ViteRunningMode.Development;
+const LOGGER_LOG_DEBUG: boolean = gameConfig.mode === ViteRunningMode.Development;
 const LOGGER_LOG_WARN: boolean = true;
 const LOGGER_LOG_ERROR: boolean = true;
 export enum LogLevel {

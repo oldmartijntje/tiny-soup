@@ -4,12 +4,12 @@ interface MqttConfigInterface {
     topicBase: string;
 }
 
-enum ViteRunningMode {
+export enum ViteRunningMode {
     Production = 0,
     Development = 1
 }
 
-interface StringLengthInterface {
+export interface StringLengthInterface {
     min: number;
     max: number;
 }
@@ -32,5 +32,5 @@ export const gameConfig: GameConfigInterface = {
         min: 4,
         max: 20
     },
-    mode: import.meta.env.PROD ? ViteRunningMode.Development : ViteRunningMode.Production
+    mode: import.meta.env.PROD ? ViteRunningMode.Production : ViteRunningMode.Development
 }

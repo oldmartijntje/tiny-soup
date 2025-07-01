@@ -7,6 +7,7 @@ import {HtmlRenderer} from "./HtmlRenderer.ts";
 import {events} from "../services/EventService.ts";
 import {EventProtocolEnum} from "../types/enum/EventProtocol.enum.ts";
 import {MqttService} from "../services/MqttService.ts";
+import {gameConfig, ViteRunningMode} from "../types/dto_interface/GameConfig.interface.ts";
 
 export class Root extends GameObject {
     private _htmlRenderer: HtmlRenderer;
@@ -23,8 +24,11 @@ export class Root extends GameObject {
     }
 
     onInit() {
-        // this._htmlRenderer.showConstructionScreen(true);
-        this._htmlRenderer.showHomeScreen(true);
+        if (gameConfig.mode == ViteRunningMode.Development) {
+            this._htmlRenderer.showHomeScreen(true);
+        } else {
+            this._htmlRenderer.showConstructionScreen(true);
+        }
         setTimeout(() => {
             // otherwise the events are not yet subscribed on the receiving end.
             events.emit(EventProtocolEnum.ShowMobileOverlay, false, false)
