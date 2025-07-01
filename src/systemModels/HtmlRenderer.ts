@@ -35,6 +35,24 @@ export class HtmlRenderer extends GameObject{
             getElementByIdAndSetDisplay(this._document, "onlineMultiplayerSelectionModal", "block");
         })) throw Error("ID does not exist.");
 
+        // host online multiplayer gamemode button
+        if (!addEventListener(this._document, "click", "onlineGameSelectHostMode", () => {
+            if (!this._modalMemory["homeMenu"] || !this._modalMemory["onlineMultiplayerSelectionModal"]) return;
+            events.emit(EventProtocolEnum.SelectMultiplayerModus, false, "Host");
+            this.prepareShowingOfMenu(true);
+            this._modalMemory["hostMultiplayerGameModal"] = true;
+            getElementByIdAndSetDisplay(this._document, "hostMultiplayerGameModal", "block");
+        })) throw Error("ID does not exist.");
+
+        // join online multiplayer gamemode button
+        if (!addEventListener(this._document, "click", "onlineGameSelectJoinMode", () => {
+            if (!this._modalMemory["homeMenu"] || !this._modalMemory["onlineMultiplayerSelectionModal"]) return;
+            events.emit(EventProtocolEnum.SelectMultiplayerModus, false, "Join");
+            this.prepareShowingOfMenu(true);
+            this._modalMemory["joinMultiplayerGameModal"] = true;
+            getElementByIdAndSetDisplay(this._document, "joinMultiplayerGameModal", "block");
+        })) throw Error("ID does not exist.");
+
         // campaign gamemode button
         if (!addEventListener(this._document, "click", "gamemodeSelectButtonCampaign", () => {
             if (!this._modalMemory["homeMenu"] || !this._modalMemory["homeModal"]) return;

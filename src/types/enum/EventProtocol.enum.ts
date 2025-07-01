@@ -6,4 +6,5 @@ export enum EventProtocolEnum {
     ShowMobileOverlay = 1,
     SelectedGamemode = 2,
     ShowHomeMenu = 3,
+    SelectMultiplayerModus = 4,
 }
