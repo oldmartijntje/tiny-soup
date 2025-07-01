@@ -6,7 +6,8 @@ class MemoryService extends SystemLogic {
 
     constructor() {
         super()
-        this._username = "player" + getRandomFiveCharNumber()
+        const username = localStorage.getItem("tiny-soup:username");
+        this._username = username ?? "player" + getRandomFiveCharNumber();
     }
 
     // Getter for username
@@ -17,6 +18,7 @@ class MemoryService extends SystemLogic {
     // Setter for username
     public set username(value: string) {
         this._logger.LogDebug(`Set username value to: "${value}"`)
+        localStorage.setItem("tiny-soup:username", value);
         this._username = value;
     }
 }
