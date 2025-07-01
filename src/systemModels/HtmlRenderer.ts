@@ -1,7 +1,12 @@
-import {addEventListener, addQueryEventListeners, getElementByIdAndSetDisplay} from "../helpers/HtmlHelpers.ts";
+import {
+    addEventListener,
+    addQueryEventListeners,
+    getElementByIdAndSetDisplay, getInputElementByIdAndSetValue
+} from "../helpers/HtmlHelpers.ts";
 import {events} from "../services/EventService.ts";
 import {EventProtocolEnum} from "../types/enum/EventProtocol.enum.ts";
 import {SystemLogic} from "./SystemLogic.ts";
+import {memoryService} from "../services/MemoryService.ts";
 
 const MODALS = ["constructionModal", "homeModal", "onlineMultiplayerSelectionModal", "joinMultiplayerGameModal", "hostMultiplayerGameModal"];
 
@@ -78,6 +83,7 @@ export class HtmlRenderer extends SystemLogic {
             this.showHomeScreen(true);
         })) throw Error("Unknown error, investigate me!");
 
+        if (!getInputElementByIdAndSetValue(this._document, "usernameField", memoryService.username)) throw Error("Username Input field not defined.");
     }
 
     private setMobileOverlay(show: boolean = true) {

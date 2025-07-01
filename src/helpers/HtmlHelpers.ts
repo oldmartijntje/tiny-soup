@@ -26,3 +26,21 @@ export function addQueryEventListeners(document: Document, eventType: string, qu
     }
     return false;
 }
+
+export function getElementByIdAndSetInnerHTML(document: Document, id: string, innerHTML: string): boolean {
+    const element = document.getElementById(id);
+    if (element) {
+        element.innerHTML = innerHTML;
+        return true;
+    }
+    return false;
+}
+
+export function getInputElementByIdAndSetValue(document: Document, id: string, value: string): boolean {
+    const element = document.getElementById(id);
+    if (element && element instanceof HTMLInputElement) {
+        element.value = value;
+        return true;
+    }
+    return false;
+}
