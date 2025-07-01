@@ -1,13 +1,14 @@
 import {
     addEventListener,
     addQueryEventListeners,
-    getElementByIdAndSetDisplay, getInputElementByIdAndSetValue
+    getElementByIdAndSetDisplay, getElementByIdAndSetInnerHTML, getInputElementByIdAndSetValue
 } from "../helpers/HtmlHelpers.ts";
 import {events} from "../services/EventService.ts";
 import {EventProtocolEnum} from "../types/enum/EventProtocol.enum.ts";
 import {SystemLogic} from "./SystemLogic.ts";
 import {memoryService} from "../services/MemoryService.ts";
 import {gameConfig} from "../types/dto_interface/GameConfig.interface.ts";
+import {getRandomAlphaNumString} from "../helpers/RandomisationHelper.ts";
 
 const MODALS = ["constructionModal", "homeModal", "onlineMultiplayerSelectionModal", "joinMultiplayerGameModal", "hostMultiplayerGameModal"];
 
@@ -71,6 +72,11 @@ export class HtmlRenderer extends SystemLogic {
             events.emit(EventProtocolEnum.SelectMultiplayerModus, false, "Host");
             this.prepareShowingOfMenu(true);
             this._modalMemory["hostMultiplayerGameModal"] = true;
+            memoryService.setLobby({
+                isActive: true, lobbyIdentifier: getRandomAlphaNumString(5),
+                discoverable: false, discoverableLobbyIdentifier: getRandomAlphaNumString(10)
+            });
+            if (!getElementByIdAndSetInnerHTML(this._document, "lobbyHostId", memoryService.getLobby().lobbyIdentifier)) throw Error("Lobby host id element not defined.");
             getElementByIdAndSetDisplay(this._document, "hostMultiplayerGameModal", "block");
         })) throw Error("ID does not exist.");
 
@@ -104,6 +110,14 @@ export class HtmlRenderer extends SystemLogic {
         // all back buttons rerouted to main menu
         if (!addQueryEventListeners(this._document, "click", ".backButton", () => {
             if (!this._modalMemory["homeMenu"]) return;
+            if (this._modalMemory["hostMultiplayerGameModal"]) {
+                memoryService.setLobby({
+                    isActive: false,
+                    lobbyIdentifier: '',
+                    discoverable: false,
+                    discoverableLobbyIdentifier: ''
+                })
+            }
             events.emit(EventProtocolEnum.ShowHomeMenu, false, true);
             this.showHomeScreen(true);
         })) throw Error("Unknown error, investigate me!");
