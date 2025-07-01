@@ -6,16 +6,19 @@ import {GameObjectInterface} from "../types/dto_interface/GameObject.Interface.t
 import {HtmlRenderer} from "./HtmlRenderer.ts";
 import {events} from "../services/EventService.ts";
 import {EventProtocolEnum} from "../types/enum/EventProtocol.enum.ts";
+import {MqttService} from "../services/MqttService.ts";
 
 export class Root extends GameObject {
     private _htmlRenderer: HtmlRenderer;
     private _gameClient: null = null;
     private _gameLogicHandler?: IGameLogicHandler;
+    private _mqttService: MqttService;
 
     constructor(document: Document, fields?: GameObjectInterface) {
         super(fields);
         this.position = new Vector2(0,0);
         this._htmlRenderer = new HtmlRenderer(document);
+        this._mqttService = new MqttService();
     }
 
     onInit() {
