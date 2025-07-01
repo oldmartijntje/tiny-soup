@@ -51,6 +51,15 @@ class Registerer {
         claimedItem.onUse(claimerType);
         return claimedItem.object;
     }
+
+    /**
+     * Remove item from the registry.
+     * @param caller
+     */
+    public die(caller: object): void {
+        this._logger.Log(`${caller.constructor.name} unsubscribed from all events.`);
+        this._database = this._database.filter(stored => stored.object !== caller);
+    }
 }
 
 export const registry = new Registerer();

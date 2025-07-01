@@ -3,6 +3,7 @@ import {DrawLayersEnum} from "../types/enum/DrawLayers.enum.ts";
 import {GameObjectInterface} from "../types/dto_interface/GameObject.Interface.ts";
 import {Vector2} from "./Vector2.ts";
 import {Logger} from "./Logger.ts";
+import {events} from "./EventHandler.ts";
 
 /**
  * Anything in the game that needs support for rendering, or interacting with others, is a gameobject.
@@ -104,7 +105,7 @@ export abstract class GameObject {
         if (this.parent) {
             this.parent.removeChild(this);
         }
-        // events.unsubscribe(gameObject);
+        events.unsubscribe(this);
     }
 
 
