@@ -1,8 +1,9 @@
 import {EventProtocolEnum} from "../types/enum/EventProtocol.enum.ts";
 import {GameEvent} from "../types/custom/SystemTypes.ts";
-import {EventSubscriptionInterface} from "../types/interface/EventSubscriptionInterface.ts";
-import {EventReceiptInterface} from "../types/interface/EventReceipt.interface.ts";
-import {Logger} from "./Logger.ts";
+import {EventSubscriptionInterface} from "../types/dto_interface/EventSubscriptionInterface.ts";
+import {EventReceiptInterface} from "../types/dto_interface/EventReceipt.interface.ts";
+import {GameService} from "../systemModels/GameService.ts";
+import {SystemLogic} from "../systemModels/SystemLogic.ts";
 
 export type EventProtocol = EventProtocolEnum | AdvancedEventProtocolInterface;
 
@@ -23,13 +24,12 @@ function isAdvancedEventProtocolInterface(
     );
 }
 
-class EventHandler {
+class EventService extends SystemLogic implements GameService {
     private _database: EventSubscriptionInterface[] = [];
     private _nextId: number = 0;
-    private _logger: Logger<any>;
 
     constructor() {
-        this._logger = new Logger<EventHandler>(this);
+        super();
         this._logger.LogInfo("Running EventHandler()")
     }
 
@@ -111,12 +111,12 @@ class EventHandler {
         } else {
             actualProtocol = `${protocol}://${PROTECTION_KEY}`;
         }
-        this._logger.StringifyObject(value).PrependText(`Emitted event '${protocol}', error == ${error}, with this data: `).Log()
+        this._logger.StringifyObject(value).PrependText(`Emitted event '${actualProtocol}', error == ${error}, with this data: `).Log()
         this._database.forEach(stored => {
             if (stored.protocol === actualProtocol) {
                 stored.callback({
                     error: error,
-                    data: value
+                    value: value
                 });
                 if (stored.executeOnce) {
                     this.cancel(stored.id);
@@ -124,6 +124,13 @@ class EventHandler {
             }
         })
     }
+
+    /**
+     * This is redundant.
+     */
+    public destroy() {
+
+    }
 }
 
-export const events: EventHandler = new EventHandler();
+export const events: EventService = new EventService();

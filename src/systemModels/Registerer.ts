@@ -1,16 +1,15 @@
-import {Logger} from "./Logger.ts";
-import {RegistererRegisteredObjectInterface} from "../types/interface/RegistererRegisteredObject.interface.ts";
+import {RegistererRegisteredObjectInterface} from "../types/dto_interface/RegistererRegisteredObject.interface.ts";
 import {OnRegistererClaimFunction} from "../types/custom/SystemTypes.ts";
 import {RegistererTypesEnum} from "../types/enum/RegistererTypes.enum.ts";
 import {RegistererClaimable} from "../dto/RegistererClaimable.ts";
+import {SystemLogic} from "./SystemLogic.ts";
 
-class Registerer {
+class Registerer extends SystemLogic {
     private _nextId: number = 0;
-    private _logger: Logger<any>;
     private _database: RegistererRegisteredObjectInterface[] = [];
 
     constructor() {
-        this._logger = new Logger<Registerer>(this);
+        super();
         this._logger.LogInfo("Running Registerer()")
     }
 
@@ -50,6 +49,15 @@ class Registerer {
         }
         claimedItem.onUse(claimerType);
         return claimedItem.object;
+    }
+
+    /**
+     * Remove item from the registry.
+     * @param caller
+     */
+    public die(caller: object): void {
+        this._logger.Log(`${caller.constructor.name} unsubscribed from all events.`);
+        this._database = this._database.filter(stored => stored.object !== caller);
     }
 }
 

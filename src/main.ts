@@ -1,12 +1,6 @@
 import {DrawFunction, UpdateFunction} from "./types/custom/SystemTypes.ts";
 import {GameLoop} from "./systemModels/GameLoop.ts";
 import {Root} from "./systemModels/Root.ts";
-import {events} from "./systemModels/EventHandler.ts";
-import {EventProtocolEnum} from "./types/enum/EventProtocol.enum.ts";
-
-events.subscribe(EventProtocolEnum.TEST, [], () => {
-    console.log("Received test message from event.");
-})
 
 const canvas = document.querySelector("#game-canvas");
 if (canvas == null) {
@@ -21,9 +15,7 @@ if (ctx == null) {
     throw Error("ctx is null");
 }
 
-console.log("code works!")
-
-const root = new Root();
+const root = new Root(document);
 // root.addChild(databank);
 // root.setLevel(new Menu());
 // root.registerMouseMovement(canvas);

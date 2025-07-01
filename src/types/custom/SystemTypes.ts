@@ -1,4 +1,4 @@
-import {GameEventDataInterface} from "../interface/GameEventData.interface.ts";
+import {GameEventDataInterface} from "../dto_interface/GameEventData.interface.ts";
 import {RegistererTypesEnum} from "../enum/RegistererTypes.enum.ts";
 
 /**

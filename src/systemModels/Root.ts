@@ -1,27 +1,39 @@
 import {GameObject} from "./GameObject.ts";
-import {GameObjectInterface} from "../types/interface/GameObject.Interface.ts";
 import {Vector2} from "./Vector2.ts";
 import {DrawLayersEnum} from "../types/enum/DrawLayers.enum.ts";
-import {events} from "./EventHandler.ts";
+import {IGameLogicHandler} from "../types/interface/IGameLogicHandler.ts";
+import {GameObjectInterface} from "../types/dto_interface/GameObject.Interface.ts";
+import {HtmlRenderer} from "./HtmlRenderer.ts";
+import {events} from "../services/EventService.ts";
 import {EventProtocolEnum} from "../types/enum/EventProtocol.enum.ts";
-import {registry} from "./Registerer.ts";
-import {RegistererTypesEnum} from "../types/enum/RegistererTypes.enum.ts";
+import {MqttService} from "../services/MqttService.ts";
+import {gameConfig, ViteRunningMode} from "../types/dto_interface/GameConfig.interface.ts";
 
 export class Root extends GameObject {
-    constructor(fields?: GameObjectInterface) {
+    private _htmlRenderer: HtmlRenderer;
+    private _gameClient: null = null;
+    private _gameLogicHandler?: IGameLogicHandler;
+    // @ts-ignore
+    private _mqttService: MqttService;
+
+    constructor(document: Document, fields?: GameObjectInterface) {
         super(fields);
         this.position = new Vector2(0,0);
+        this._htmlRenderer = new HtmlRenderer(document);
+        this._mqttService = new MqttService();
     }
 
     onInit() {
-        events.emit(EventProtocolEnum.TEST, false)
-        registry.registerMe(this, RegistererTypesEnum.ROOT_OBJECT, true)
-        const claimables = registry.findAvailable(RegistererTypesEnum.ROOT_OBJECT);
-        this._logger.StringifyObject(claimables).LogDebug();
-        if (claimables.length >= 1) {
-            this._logger.StringifyObject(claimables[0].ClaimEntry(this, RegistererTypesEnum.ROOT_OBJECT)).LogDebug();
-            this._logger.StringifyObject(claimables[0].ClaimEntry(this, RegistererTypesEnum.ROOT_OBJECT)).LogDebug();
+        if (gameConfig.mode == ViteRunningMode.Development) {
+            this._htmlRenderer.showHomeScreen(true);
+        } else {
+            this._htmlRenderer.showConstructionScreen(true);
         }
+        setTimeout(() => {
+            // otherwise the events are not yet subscribed on the receiving end.
+            events.emit(EventProtocolEnum.ShowMobileOverlay, false, false)
+            events.emit(EventProtocolEnum.MQTT_SubscribeToTopic, false, "openLobbies");
+        }, 1)
     }
 
     /**
