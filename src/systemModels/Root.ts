@@ -26,7 +26,9 @@ export class Root extends GameObject {
         // this._htmlRenderer.showConstructionScreen(true);
         this._htmlRenderer.showHomeScreen(true);
         setTimeout(() => {
+            // otherwise the events are not yet subscribed on the receiving end.
             events.emit(EventProtocolEnum.ShowMobileOverlay, false, false)
+            events.emit(EventProtocolEnum.MQTT_SubscribeToTopic, false, "openLobbies");
         }, 1)
     }
 

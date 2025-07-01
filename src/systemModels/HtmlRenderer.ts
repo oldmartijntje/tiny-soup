@@ -81,7 +81,7 @@ export class HtmlRenderer extends SystemLogic {
     }
 
     private setMobileOverlay(show: boolean = true) {
-        getElementByIdAndSetDisplay(this._document, "mobileOverlay", show ? "block" : "none");
+        getElementByIdAndSetDisplay(this._document, "mobileOverlay", show ? "flex" : "none");
     }
 
     private hideAllMenus(): void {

@@ -7,4 +7,7 @@ export enum EventProtocolEnum {
     SelectedGamemode = 2,
     ShowHomeMenu = 3,
     SelectMultiplayerModus = 4,
+    MQTT_SubscribeToTopic= 5,
+    MQTT_UnSubscribe= 6,
+    MQTT_MESSAGE = 7,
 }
