@@ -15,6 +15,7 @@ export class MqttService extends SystemLogic implements GameService {
     private _client: MqttClient;
     private _subscriptions: { [id: string] : boolean; } = {};
     private _todoSubscriptions: string[] = [];
+    private _todoMessages: MqttBroadcastInterface[] = [];
     private _isRunning: boolean = false;
     constructor() {
         super();
@@ -24,6 +25,9 @@ export class MqttService extends SystemLogic implements GameService {
             this._logger.LogInfo('Connected to MQTT broker');
             this._todoSubscriptions.forEach((el: string) => {
                 this.subscribeToTopic(el);
+            })
+            this._todoMessages.forEach((el: MqttBroadcastInterface) => {
+                this.publishMessage(el.topic, el.message);
             })
         });
         this._client.on('message', (topic: string, message: Buffer) => {
@@ -65,6 +69,10 @@ export class MqttService extends SystemLogic implements GameService {
             if (typeof data.value == typeof {}) {
                 try {
                     var broadcast = data.value as MqttBroadcastInterface;
+                    if (!this._isRunning) {
+                        this._todoMessages.push(broadcast);
+                        return;
+                    }
                     this.publishMessage(broadcast.topic, broadcast.message);
                 } catch (e) {
                     this._logger.StringifyObject(e).PrependText("Failed to parse MQTT message").LogError();
