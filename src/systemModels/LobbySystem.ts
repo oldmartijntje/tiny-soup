@@ -6,6 +6,7 @@ import {memoryService} from "../services/MemoryService.ts";
 import {MqttBroadcastInterface} from "../types/dto_interface/MqttBroadcast.interface.ts";
 import {MqttTopics} from "../types/custom/MqttTopics.ts";
 import {MQTT_LobbyAnnouncementInterface} from "../types/dto_interface/MqttMessages.ts";
+import {gameConfig} from "../types/dto_interface/GameConfig.interface.ts";
 
 function isMqttLobbyAnnouncementInterface(obj: any): obj is MQTT_LobbyAnnouncementInterface {
     return typeof obj === 'object' &&
@@ -35,22 +36,7 @@ export class LobbySystem extends SystemLogic implements Destroyable {
 
     onInit() {
         events.subscribe(EventProtocolEnum.HostLobby, this, ()=> {
-            const lobby = memoryService.getLobby()
-            if (!lobby.isActive) {
-                return;
-            }
-            if (lobby.discoverable) {
-                const mqttMessage: MQTT_LobbyAnnouncementInterface = {
-                    identifier: lobby.discoverableLobbyIdentifier,
-                    username: memoryService.username,
-                    players: 1
-                }
-                const message: MqttBroadcastInterface = {
-                    topic: MqttTopics.LOBBY_DISCOVERY,
-                    message: JSON.stringify(mqttMessage),
-                }
-                events.emit(EventProtocolEnum.MQTT_Broadcast, false, message)
-            }
+            this.sendLobbyPing();
         });
 
         events.subscribe(EventProtocolEnum.MQTT_MESSAGE_RECEIVED, this, (data)=> {
@@ -85,6 +71,25 @@ export class LobbySystem extends SystemLogic implements Destroyable {
                 }
             }
         });
+        setInterval(() => {
+            this.sendLobbyPing();
+        }, 5000)
+    }
+
+    private sendLobbyPing() {
+        const lobby = memoryService.getLobby();
+        if (!lobby.discoverable || !lobby.isActive || lobby.players >= gameConfig.playersPerGame.max) return;
+        const mqttMessage: MQTT_LobbyAnnouncementInterface = {
+            identifier: lobby.discoverableLobbyIdentifier,
+            username: memoryService.username,
+            players: 1
+        }
+        const message: MqttBroadcastInterface = {
+            topic: MqttTopics.LOBBY_DISCOVERY,
+            message: JSON.stringify(mqttMessage),
+        }
+        events.emit(EventProtocolEnum.MQTT_Broadcast, false, message)
+
     }
 
 
