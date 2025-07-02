@@ -41,7 +41,9 @@ export class LobbySystem extends SystemLogic implements Destroyable {
             }
             if (lobby.discoverable) {
                 const mqttMessage: MQTT_LobbyAnnouncementInterface = {
-                    identifier: lobby.discoverableLobbyIdentifier
+                    identifier: lobby.discoverableLobbyIdentifier,
+                    username: memoryService.username,
+                    players: 1
                 }
                 const message: MqttBroadcastInterface = {
                     topic: MqttTopics.LOBBY_DISCOVERY,
@@ -69,10 +71,13 @@ export class LobbySystem extends SystemLogic implements Destroyable {
                         if (thisLobby == null) {
                             discovery.push({
                                 identifier: message.identifier,
-                                lastPing: new Date()
-                            })
+                                lastPing: new Date(),
+                                username: message.username,
+                                players: message.players
+                            });
                         } else {
                             thisLobby.lastPing = new Date();
+                            thisLobby.players = message.players;
                         }
                     }
                 } catch (e) {

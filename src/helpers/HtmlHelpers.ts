@@ -36,6 +36,15 @@ export function getElementByIdAndSetInnerHTML(document: Document, id: string, in
     return false;
 }
 
+export function getElementByIdAndAddChildren(document: Document, id: string, child: HTMLDivElement): boolean {
+    const element = document.getElementById(id);
+    if (element) {
+        element.appendChild(child);
+        return true;
+    }
+    return false;
+}
+
 export function getInputElementByIdAndSetValue(document: Document, id: string, value: string): boolean {
     const element = document.getElementById(id);
     if (element && element instanceof HTMLInputElement) {

@@ -74,7 +74,8 @@ export class HtmlRenderer extends SystemLogic {
             this._modalMemory["hostMultiplayerGameModal"] = true;
             memoryService.setLobby({
                 isActive: true, lobbyIdentifier: getRandomAlphaNumString(5),
-                discoverable: false, discoverableLobbyIdentifier: getRandomAlphaNumString(10)
+                discoverable: false, discoverableLobbyIdentifier: getRandomAlphaNumString(10),
+                players: 1
             });
             events.emit(EventProtocolEnum.HostLobby, false, memoryService.getLobby());
             if (!setCheckboxCheckedById(this._document, "discoverySetting", false)) throw Error("Lobby host id element not defined.")
@@ -129,7 +130,8 @@ export class HtmlRenderer extends SystemLogic {
                     isActive: false,
                     lobbyIdentifier: '',
                     discoverable: false,
-                    discoverableLobbyIdentifier: ''
+                    discoverableLobbyIdentifier: '',
+                    players: 1
                 })
             }
             events.emit(EventProtocolEnum.ShowHomeMenu, false, true);

@@ -6,11 +6,14 @@ export interface LobbySettingsInterface {
     lobbyIdentifier: string; // the id you can enter in the join menu.
     discoverable: boolean; // whether you listen to `discoverableLobbyIdentifier` or not
     discoverableLobbyIdentifier: string; // the id that is discoverable
+    players: number;
 }
 
 export interface LobbyInfoInterface {
     identifier: string;
     lastPing: Date;
+    username: string;
+    players: number;
 }
 
 class MemoryService extends SystemLogic {
@@ -26,7 +29,8 @@ class MemoryService extends SystemLogic {
             isActive: false,
             lobbyIdentifier: '',
             discoverable: false,
-            discoverableLobbyIdentifier: ''
+            discoverableLobbyIdentifier: '',
+            players: 1
         };
         this._connectionData = new ConnectionData();
     }
