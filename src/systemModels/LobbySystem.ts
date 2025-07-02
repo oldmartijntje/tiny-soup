@@ -78,7 +78,8 @@ export class LobbySystem extends SystemLogic implements Destroyable {
 
     private sendLobbyPing() {
         const lobby = memoryService.getLobby();
-        if (!lobby.discoverable || !lobby.isActive || lobby.players >= gameConfig.playersPerGame.max) return;
+        if (!lobby.discoverable || !lobby.isActive || lobby.players >= gameConfig.playersPerGame.max ||
+            lobby.playing || !memoryService.isHostedGame) return;
         const mqttMessage: MQTT_LobbyAnnouncementInterface = {
             identifier: lobby.discoverableLobbyIdentifier,
             username: memoryService.username,
