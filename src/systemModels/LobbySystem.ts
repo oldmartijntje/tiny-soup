@@ -2,7 +2,7 @@ import {SystemLogic} from "./SystemLogic.ts";
 import {Destroyable} from "./Destroyable.ts";
 import {events} from "../services/EventService.ts";
 import {EventProtocolEnum} from "../types/enum/EventProtocol.enum.ts";
-import {memoryService} from "../services/MemoryService.ts";
+import {LobbyInfoInterface, LobbySettingsInterface, memoryService} from "../services/MemoryService.ts";
 import {MqttBroadcastInterface} from "../types/dto_interface/MqttBroadcast.interface.ts";
 import {MqttTopics} from "../types/custom/MqttTopics.ts";
 import {MQTT_LobbyAnnouncementInterface} from "../types/dto_interface/MqttMessages.ts";
@@ -74,10 +74,14 @@ export class LobbySystem extends SystemLogic implements Destroyable {
         setInterval(() => {
             this.sendLobbyPing();
         }, 5000)
+
+        setInterval(() => {
+            this.cleanupTask();
+        }, 1000 * 30)
     }
 
-    private sendLobbyPing() {
-        const lobby = memoryService.getLobby();
+    private sendLobbyPing(): void {
+        const lobby: LobbySettingsInterface = memoryService.getLobby();
         if (!lobby.discoverable || !lobby.isActive || lobby.players >= gameConfig.playersPerGame.max ||
             lobby.playing || !memoryService.isHostedGame) return;
         const mqttMessage: MQTT_LobbyAnnouncementInterface = {
@@ -90,14 +94,23 @@ export class LobbySystem extends SystemLogic implements Destroyable {
             message: JSON.stringify(mqttMessage),
         }
         events.emit(EventProtocolEnum.MQTT_Broadcast, false, message)
+    }
 
+    private cleanupTask(): void {
+        this._logger.LogInfo("Running cleanupTask()")
+        let discovery: LobbyInfoInterface[] = memoryService.getDiscovery();
+        const minuteAgo = Date.now() - 1000 * 60 * 2; // 2 minutes ago
+        discovery = discovery.filter((el: LobbyInfoInterface): boolean => {
+            return el.lastPing.getTime() > minuteAgo;
+        })
+        memoryService.getConnData().setDiscoveryLobbyInfo(discovery);
     }
 
 
     /**
      * Destroy it.
      */
-    public destroy() {
+    public destroy(): void {
         events.unsubscribe(this);
     }
 }
