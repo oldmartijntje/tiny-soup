@@ -72,10 +72,11 @@ export class HtmlRenderer extends SystemLogic {
             events.emit(EventProtocolEnum.SelectMultiplayerModus, false, "Host");
             this.prepareShowingOfMenu(true);
             this._modalMemory["hostMultiplayerGameModal"] = true;
+            memoryService.isHostedGame = true;
             memoryService.setLobby({
                 isActive: true, lobbyIdentifier: getRandomAlphaNumString(5),
                 discoverable: false, discoverableLobbyIdentifier: getRandomAlphaNumString(10),
-                players: 1
+                players: 1, playing: false
             });
             events.emit(EventProtocolEnum.HostLobby, false, memoryService.getLobby());
             if (!setCheckboxCheckedById(this._document, "discoverySetting", false)) throw Error("Lobby host id element not defined.")
@@ -99,6 +100,7 @@ export class HtmlRenderer extends SystemLogic {
         if (!addEventListener(this._document, "click", "onlineGameSelectJoinMode", () => {
             if (!this._modalMemory["homeMenu"] || !this._modalMemory["onlineMultiplayerSelectionModal"]) return;
             events.emit(EventProtocolEnum.SelectMultiplayerModus, false, "Join");
+            memoryService.isHostedGame = false;
             this.prepareShowingOfMenu(true);
             this._modalMemory["joinMultiplayerGameModal"] = true;
             getElementByIdAndSetDisplay(this._document, "joinMultiplayerGameModal", "block");
@@ -131,7 +133,8 @@ export class HtmlRenderer extends SystemLogic {
                     lobbyIdentifier: '',
                     discoverable: false,
                     discoverableLobbyIdentifier: '',
-                    players: 1
+                    players: 1,
+                    playing: false
                 })
             }
             events.emit(EventProtocolEnum.ShowHomeMenu, false, true);

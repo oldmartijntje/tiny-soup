@@ -7,6 +7,7 @@ export interface LobbySettingsInterface {
     discoverable: boolean; // whether you listen to `discoverableLobbyIdentifier` or not
     discoverableLobbyIdentifier: string; // the id that is discoverable
     players: number;
+    playing: boolean;
 }
 
 export interface LobbyInfoInterface {
@@ -17,31 +18,49 @@ export interface LobbyInfoInterface {
 }
 
 class MemoryService extends SystemLogic {
-    private _username: string
-    private _lobby: LobbySettingsInterface
-    private _connectionData: ConnectionData
+    private _username: string;
+    private _hostedLobby: LobbySettingsInterface;
+    private _joinedLobby: LobbySettingsInterface;
+    private _connectionData: ConnectionData;
+    private _hostedAndNotJoined: boolean;
 
     constructor() {
         super()
         const username = localStorage.getItem("tiny-soup:username");
         this._username = username ?? "player" + getRandomFiveCharNumber();
-        this._lobby = {
+        this._hostedLobby = {
             isActive: false,
             lobbyIdentifier: '',
             discoverable: false,
             discoverableLobbyIdentifier: '',
-            players: 1
+            players: 1,
+            playing: false
         };
+        this._joinedLobby = {
+            isActive: false,
+            lobbyIdentifier: '',
+            discoverable: false,
+            discoverableLobbyIdentifier: '',
+            players: 1,
+            playing: false
+        };
+        this._hostedAndNotJoined = true;
         this._connectionData = new ConnectionData();
     }
 
+
+
     public setLobby(lobby: LobbySettingsInterface): void {
         this._logger.StringifyObject(lobby).PrependText(`Set lobby value to: "`).AppendText('"').LogDebug();
-        this._lobby = lobby;
+        if (this._hostedAndNotJoined) {
+            this._hostedLobby = lobby;
+        } else {
+            this._joinedLobby = lobby;
+        }
     }
 
     public getLobby(): LobbySettingsInterface {
-        return this._lobby;
+        return this._hostedAndNotJoined ? this._hostedLobby : this._joinedLobby;
     }
 
     public setConnData(connData: ConnectionData): void {
@@ -55,6 +74,15 @@ class MemoryService extends SystemLogic {
 
     public getDiscovery(): LobbyInfoInterface[] {
         return this._connectionData.getDiscoveryLobbyInfo();
+    }
+
+    public get isHostedGame(): boolean {
+        return this._hostedAndNotJoined;
+    }
+
+    public set isHostedGame(value: boolean) {
+        this._logger.LogDebug(`Set isHostedGame value to: "${value}"`)
+        this._hostedAndNotJoined = value;
     }
 
     // Getter for username
