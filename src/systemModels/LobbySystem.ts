@@ -52,7 +52,7 @@ export class LobbySystem extends SystemLogic implements Destroyable {
                             return;
                         }
 
-                        const discovery = memoryService.getDiscovery();
+                        const discovery: LobbyInfoInterface[] = memoryService.getDiscovery();
                         const thisLobby = discovery.find(value => value.identifier == message.identifier);
                         if (thisLobby == null) {
                             discovery.push({
@@ -65,6 +65,7 @@ export class LobbySystem extends SystemLogic implements Destroyable {
                             thisLobby.lastPing = new Date();
                             thisLobby.players = message.players;
                         }
+                        events.emit(EventProtocolEnum.RefreshHtmlUI);
                     }
                 } catch (e) {
                     this._logger.StringifyObject(e).PrependText("Failed to parse MQTT message").LogError();
@@ -104,6 +105,7 @@ export class LobbySystem extends SystemLogic implements Destroyable {
             return el.lastPing.getTime() > minuteAgo;
         })
         memoryService.getConnData().setDiscoveryLobbyInfo(discovery);
+        events.emit(EventProtocolEnum.RefreshHtmlUI);
     }
 
 

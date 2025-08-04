@@ -15,5 +15,6 @@ export enum EventProtocolEnum {
     HostLobby = 10,
     JoinLobby = 11,
     DisconnectLobby = 12,
-    CloseLobby = 13
+    CloseLobby = 13,
+    RefreshHtmlUI = 14
 }
