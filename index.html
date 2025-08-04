@@ -19,6 +19,8 @@
             document.documentElement.setAttribute('data-bs-theme', 'dark');
         }
     </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         crossorigin="anonymous">
 </head>
@@ -32,7 +34,12 @@
             <div class="modal-dialog">
                 <div class="modal-content border-warning">
                     <div class="modal-header bg-warning text-dark">
-                        <h5 class="modal-title">Work in Progress</h5>
+                        <h5 class="modal-title">Work in Progress<button type="button" class="btn btn-link p-0 ms-2 info-trigger" aria-label="Info"
+                                                                        data-title="tiny-soup"
+                                                                        data-body="This is an opensource project that uses MQTT, Typescript, HTML canvas, Bootstrap. You can look at the progress on &lt;a href=&quot;https://github.com/oldmartijntje/tiny-soup&quot; target=&quot;_blank&quot;&gt;my github repo&lt;/a&gt; or track the progress on my &lt;a href=&quot;https://github.com/users/oldmartijntje/projects/2/views/1&quot; target=&quot;_blank&quot;&gt;my github board&lt;/a&gt;."
+                                                                        data-time="Just now">
+                            <i class="bi bi-info-circle"></i>
+                        </button></h5>
                     </div>
                     <div class="modal-body">
                         <p>This repo is a work in progress.</p>
@@ -51,7 +58,12 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Welcome to tiny-soup</h5>
+                        <h5 class="modal-title">Welcome to tiny-soup <button type="button" class="btn btn-link p-0 ms-2 info-trigger" aria-label="Info"
+                                                                             data-title="tiny-soup"
+                                                                             data-body="This is an opensource project that uses MQTT, Typescript, HTML canvas, Bootstrap. You can look at the progress on &lt;a href=&quot;https://github.com/oldmartijntje/tiny-soup&quot; target=&quot;_blank&quot;&gt;my github repo&lt;/a&gt; or track the progress on my &lt;a href=&quot;https://github.com/users/oldmartijntje/projects/2/views/1&quot; target=&quot;_blank&quot;&gt;my github board&lt;/a&gt;."
+                                                                             data-time="Just now">
+                            <i class="bi bi-info-circle"></i>
+                        </button></h5>
                     </div>
                     <div class="modal-body">
                         <p>Choose your gamemode</p>
@@ -103,12 +115,23 @@
                     <div class="modal-header">
                         <h5 class="modal-title">Joining Multiplayer</h5>
                     </div>
-                    <div class="modal-body">
-                        <div class="accordion" id="">
-
+                    <div class="modal-body" id="gameLobbiesBox">
+                        <div class="accordion" id="accordion_001">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4Z6C46EY" aria-controls="collapse4Z6C46EY" aria-expanded="true">Player67533 (0/2)</button>
+                                </h2>
+                                <div id="collapse4Z6C46EY" class="accordion-collapse collapse show" aria-labelledby="heading4Z6C46EY" data-bs-parent="#discoveryAccordion" style="">
+                                    <div class="accordion-body">Host: Player67533<br>Players: 0/2<br>Id: 4Z6C46EY<br>
+                                        <button id="joinLobby4Z6C46EY" class="btn btn-primary">Join</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <button type="button" id="onlineGameSelectHostMode2" class="btn btn-success" style="display: none;">Host
+                            Game Instead</button>
                         <button type="button" class="btn btn-secondary backButton">Back</button>
                     </div>
                 </div>
@@ -120,12 +143,15 @@
                     <div class="modal-header">
                         <h5 class="modal-title">Hosting Multiplayer</h5>
                     </div>
-                    <div class="alert alert-info" role="alert">
-                        Lobby Code: <span id="lobbyHostId">AEB1Z</span>
+                    <div class="alert alert-primary" role="alert" style="margin: 1rem;">
+                        Lobby Code: <span id="lobbyHostId">AEB1Z</span> <button type="button" class="btn btn-link p-0 ms-2 info-trigger" aria-label="Info"
+                                                                                data-title="Lobby ID" data-body="This ID is not shared over MQTT, which makes it so that your lobby is hidden to the public. Once your ID is shared it will grant anyone access to your lobby. The 'Show in discovery' toggle doesn't share this ID, it shares another ID that will only work when the toggle is enabled." data-time="Just now">
+                        <i class="bi bi-info-circle"></i>
+                    </button>
                     </div>
                     <div class="modal-body">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="discoverySetting">
+                            <input class="form-check-input" type="checkbox" id="discoverySetting">
                             <label class="form-check-label" for="discoverySetting">
                                 Show in discovery
                             </label>
@@ -141,7 +167,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary backButton">Back</button>
+                        <button type="button" class="btn btn-secondary backButton">Close Lobby</button>
                     </div>
                 </div>
             </div>
@@ -162,6 +188,41 @@
 
         window.addEventListener('resize', resizeCanvas);
         window.addEventListener('load', resizeCanvas);
+    </script>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" aria-live="polite" aria-atomic="true">
+        <div id="sharedToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto" id="toastTitle">Title</strong>
+                <small id="toastTime">time</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="toastBody">
+                Body
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('click', function (e) {
+            const trigger = e.target.closest('.info-trigger');
+            if (!trigger) return;
+
+            const title = trigger.dataset.title || 'Info';
+            const bodyHtml = trigger.dataset.body || '';
+            const time = trigger.dataset.time || '';
+
+            document.getElementById('toastTitle').textContent = title;
+            document.getElementById('toastTime').textContent = time;
+
+            // inject as HTML (only safe because you control the content)
+            document.getElementById('toastBody').innerHTML = bodyHtml;
+
+            const toastEl = document.getElementById('sharedToast');
+            const toast = new bootstrap.Toast(toastEl, { delay: 5000 });
+            toast.show();
+        });
+
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
