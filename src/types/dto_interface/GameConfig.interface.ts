@@ -9,7 +9,7 @@ export enum ViteRunningMode {
     Development = 1
 }
 
-export interface StringLengthInterface {
+export interface MinMaxLengthInterface {
     min: number;
     max: number;
 }
@@ -17,8 +17,9 @@ export interface StringLengthInterface {
 export interface GameConfigInterface {
     gridSize: number;
     mqttConfig: MqttConfigInterface,
-    usernameLength: StringLengthInterface,
-    mode: ViteRunningMode
+    usernameLength: MinMaxLengthInterface,
+    mode: ViteRunningMode,
+    playersPerGame: MinMaxLengthInterface
 }
 
 export const gameConfig: GameConfigInterface = {
@@ -26,11 +27,15 @@ export const gameConfig: GameConfigInterface = {
     mqttConfig: {
         brokerUrl: "test.mosquitto.org",
         brokerPort: 8081,
-        topicBase: new Date().getUTCFullYear().toString()
+        topicBase: new Date().getUTCFullYear().toString() + "protocol."
     },
     usernameLength: {
         min: 4,
         max: 20
     },
-    mode: import.meta.env.PROD ? ViteRunningMode.Production : ViteRunningMode.Development
+    mode: import.meta.env.PROD ? ViteRunningMode.Production : ViteRunningMode.Development,
+    playersPerGame: {
+        min: 2,
+        max: 2
+    }
 }
