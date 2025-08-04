@@ -18,6 +18,7 @@ const MODALS = ["constructionModal", "homeModal", "onlineMultiplayerSelectionMod
 export class HtmlRenderer extends SystemLogic {
     private _document: Document;
     private _modalMemory: { [id: string] : boolean; } = {};
+    private _accordionMemory: { [id: string] : boolean; } = {};
 
     constructor(document: Document) {
         super();
@@ -104,36 +105,97 @@ export class HtmlRenderer extends SystemLogic {
 
         let showLobbyMenuMethod = () => {
             const discovery: LobbyInfoInterface[] = memoryService.getDiscovery();
-            if (discovery.length == 0) {
-                if (!getElementByIdAndSetDisplay(this._document, "onlineGameSelectHostMode2", "block")) throw Error("joinMultiplayerGameModal does not exist.");
-                if (!getElementByIdAndSetInnerHTML(this._document, "gameLobbiesBox", "<div class=\"alert alert-warning\" role=\"alert\">\n" +
-                    "        <h3>No Open Lobbies</h3>\n" +
-                    "        <p>Wow, such empty.</p><sub>Try hosting a lobby yourself.</sub>\n" +
-                    "    </div>")) throw Error("gameLobbiesBox does not exist.");
+            if (discovery.length === 0) {
+                if (!getElementByIdAndSetDisplay(this._document, "onlineGameSelectHostMode2", "block"))
+                    throw Error("joinMultiplayerGameModal does not exist.");
+                if (!getElementByIdAndSetInnerHTML(
+                    this._document,
+                    "gameLobbiesBox",
+                    `<div class="alert alert-warning" role="alert">
+                <h3>No Open Lobbies</h3>
+                <p>Wow, such empty.</p>
+                <sub>Try hosting a lobby yourself.</sub>
+            </div>`
+                )) throw Error("gameLobbiesBox does not exist.");
                 return;
             }
-            if (!getElementByIdAndSetDisplay(this._document, "onlineGameSelectHostMode2", "none")) throw Error("joinMultiplayerGameModal does not exist.");
-            let lobbyNumber: number = 0;
-            let innerHtml: string = "";
+
+            if (!getElementByIdAndSetDisplay(this._document, "onlineGameSelectHostMode2", "none"))
+                throw Error("joinMultiplayerGameModal does not exist.");
+
+            let lobbyNumber = 0;
+            let innerHtml = "";
+            for (const key of Object.keys(this._accordionMemory)) {
+                if (!discovery.some((element: LobbyInfoInterface): boolean => element.identifier === key)) {
+                    delete this._accordionMemory[key];
+                }
+            }
+
             discovery.forEach((element: LobbyInfoInterface): void => {
-                console.log(element)
-                innerHtml += "<div class=\"accordion\" id=\"accordion_" + lobbyNumber+"\">\n" +
-                    "                            <div class=\"accordion-item\">\n" +
-                    "                                <h2 class=\"accordion-header\">\n" +
-                    "                                    <button class=\"accordion-button\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#collapse4Z6C46EY\" aria-controls=\"collapse4Z6C46EY\" aria-expanded=\"true\">" + element.username +" (" + element.players +"/2)</button>\n" +
-                    "                                </h2>\n" +
-                    "                                <div id=\"collapse4Z6C46EY\" class=\"accordion-collapse collapse show\" aria-labelledby=\"heading4Z6C46EY\" data-bs-parent=\"#discoveryAccordion\" style=\"\">\n" +
-                    "                                    <div class=\"accordion-body\">Host: " + element.username +"<br>Players: " + element.players + "/2<br>ID: " + element.identifier + "<br>\n" +
-                    "                                       <sub>This ID is not the same ID as seen on the device of the host. That ID is kept private.</sub><br/><br/> " +
-                    "                                       <button id=\"joinLobby4Z6C46EY\" class=\"btn btn-primary\">Join</button>\n" +
-                    "                                    </div>\n" +
-                    "                                </div>\n" +
-                    "                            </div>\n" +
-                    "                        </div><br/>"
-            })
-            if (!getElementByIdAndSetInnerHTML(this._document, "gameLobbiesBox", innerHtml)) throw Error("gameLobbiesBox does not exist.");
+                if (this._accordionMemory[element.identifier] == undefined) {
+                    this._accordionMemory[element.identifier] = false;
+                }
+                const collapseId = `collapse_${lobbyNumber}`;
+                // const buttonId = `button_${lobbyNumber}`;
+                innerHtml += `
+            <div class="accordion" id="accordion_${lobbyNumber}">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="heading_${lobbyNumber}">
+                        <button 
+                            class="accordion-button ${this._accordionMemory[element.identifier] ? "" : "collapsed"}" 
+                            type="button" 
+                            data-bs-toggle="collapse" 
+                            data-bs-target="#${collapseId}" 
+                            aria-expanded="${this._accordionMemory[element.identifier] ? "true" : "false"}" 
+                            aria-controls="${collapseId}">
+                            ${element.username} (${element.players}/2)
+                        </button>
+                    </h2>
+                    <div 
+                        id="${collapseId}" 
+                        class="accordion-collapse collapse ${this._accordionMemory[element.identifier] ? "show" : ""}" 
+                        data-lobby-number="${element.identifier}"
+                        aria-labelledby="heading_${lobbyNumber}">
+                        <div class="accordion-body">
+                            Host: ${element.username}<br>
+                            Players: ${element.players}/2<br>
+                            ID: ${element.identifier}<br>
+                            <sub>This ID is not the same ID as seen on the device of the host. That ID is kept private.</sub><br/><br/>
+                            <button id="joinLobby_${lobbyNumber}" class="btn btn-primary">Join</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br/>
+        `;
+                lobbyNumber++;
+            });
+
+            if (!getElementByIdAndSetInnerHTML(this._document, "gameLobbiesBox", innerHtml))
+                throw Error("gameLobbiesBox does not exist.");
         }
+
         events.subscribe(EventProtocolEnum.RefreshHtmlUI, this, showLobbyMenuMethod);
+
+        const lobbiesContainer = this._document.getElementById("gameLobbiesBox");
+        const onShown = (e: Event) => {
+            const target = e.target as HTMLElement; // the `.accordion-collapse` that was shown
+            if (target.classList.contains("accordion-collapse")) {
+                const lobbyNum: string | undefined = target.dataset.lobbyNumber;
+                if (lobbyNum == undefined) return;
+                this._accordionMemory[lobbyNum] = true;
+            }
+        };
+        const onHidden = (e: Event) => {
+            const target = e.target as HTMLElement;
+            if (target.classList.contains("accordion-collapse")) {
+                const lobbyNum: string | undefined = target.dataset.lobbyNumber;
+                if (lobbyNum == undefined) return;
+                this._accordionMemory[lobbyNum] = false;
+            }
+        };
+        lobbiesContainer?.addEventListener("shown.bs.collapse", onShown as EventListener);
+        lobbiesContainer?.addEventListener("hidden.bs.collapse", onHidden as EventListener);
 
         // join online multiplayer gamemode button
         if (!addEventListener(this._document, "click", "onlineGameSelectJoinMode", (): void => {
