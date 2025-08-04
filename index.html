@@ -34,7 +34,12 @@
             <div class="modal-dialog">
                 <div class="modal-content border-warning">
                     <div class="modal-header bg-warning text-dark">
-                        <h5 class="modal-title">Work in Progress</h5>
+                        <h5 class="modal-title">Work in Progress<button type="button" class="btn btn-link p-0 ms-2 info-trigger" aria-label="Info"
+                                                                        data-title="tiny-soup"
+                                                                        data-body="This is an opensource project that uses MQTT, Typescript, HTML canvas, Bootstrap. You can look at the progress on &lt;a href=&quot;https://github.com/oldmartijntje/tiny-soup&quot; target=&quot;_blank&quot;&gt;my github repo&lt;/a&gt; or track the progress on my &lt;a href=&quot;https://github.com/users/oldmartijntje/projects/2/views/1&quot; target=&quot;_blank&quot;&gt;my github board&lt;/a&gt;."
+                                                                        data-time="Just now">
+                            <i class="bi bi-info-circle"></i>
+                        </button></h5>
                     </div>
                     <div class="modal-body">
                         <p>This repo is a work in progress.</p>
@@ -53,7 +58,12 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Welcome to tiny-soup</h5>
+                        <h5 class="modal-title">Welcome to tiny-soup <button type="button" class="btn btn-link p-0 ms-2 info-trigger" aria-label="Info"
+                                                                             data-title="tiny-soup"
+                                                                             data-body="This is an opensource project that uses MQTT, Typescript, HTML canvas, Bootstrap. You can look at the progress on &lt;a href=&quot;https://github.com/oldmartijntje/tiny-soup&quot; target=&quot;_blank&quot;&gt;my github repo&lt;/a&gt; or track the progress on my &lt;a href=&quot;https://github.com/users/oldmartijntje/projects/2/views/1&quot; target=&quot;_blank&quot;&gt;my github board&lt;/a&gt;."
+                                                                             data-time="Just now">
+                            <i class="bi bi-info-circle"></i>
+                        </button></h5>
                     </div>
                     <div class="modal-body">
                         <p>Choose your gamemode</p>
@@ -198,20 +208,21 @@
             const trigger = e.target.closest('.info-trigger');
             if (!trigger) return;
 
-            const title = trigger.getAttribute('data-title') || 'Info';
-            const body = trigger.getAttribute('data-body') || '';
-            const time = trigger.getAttribute('data-time') || '';
+            const title = trigger.dataset.title || 'Info';
+            const bodyHtml = trigger.dataset.body || '';
+            const time = trigger.dataset.time || '';
 
-            // Populate shared toast
             document.getElementById('toastTitle').textContent = title;
-            document.getElementById('toastBody').textContent = body;
             document.getElementById('toastTime').textContent = time;
 
-            // Show it
+            // inject as HTML (only safe because you control the content)
+            document.getElementById('toastBody').innerHTML = bodyHtml;
+
             const toastEl = document.getElementById('sharedToast');
             const toast = new bootstrap.Toast(toastEl, { delay: 5000 });
             toast.show();
         });
+
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
