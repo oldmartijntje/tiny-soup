@@ -159,8 +159,10 @@ export class HtmlRenderer extends SystemLogic {
                         <div class="accordion-body">
                             Host: ${element.username}<br>
                             Players: ${element.players}/2<br>
-                            ID: ${element.identifier}<br>
-                            <sub>This ID is not the same ID as seen on the device of the host. That ID is kept private.</sub><br/><br/>
+                            ID: ${element.identifier} <button type="button" class="btn btn-link p-0 ms-2 info-trigger" aria-label="Info"
+          data-title="Lobby ID" data-body="This ID is shared over MQTT, which makes it discoverable. This is not the same ID as seen on the host their screen. The ID shared over MQTT is only usable when the host sets the lobby as dicoverable, whereas the ID on their screen is always usable." data-time="Just now">
+    <i class="bi bi-info-circle"></i>
+  </button><br><br/>
                             <button id="joinLobby_${lobbyNumber}" class="btn btn-primary">Join</button>
                         </div>
                     </div>
