@@ -48,7 +48,6 @@ function parseMqttLobbyCloseAnnouncement(jsonString: string): MQTT_LobbyClosingI
 
 
 export class LobbySystem extends SystemLogic implements Destroyable {
-
     constructor() {
         super();
     }

@@ -47,9 +47,7 @@ class MemoryService extends SystemLogic {
         this._hostedAndNotJoined = true;
         this._connectionData = new ConnectionData();
     }
-
-
-
+    
     public setLobby(lobby: LobbySettingsInterface): void {
         this._logger.StringifyObject(lobby).PrependText(`Set lobby value to: "`).AppendText('"').LogDebug();
         if (this._hostedAndNotJoined) {
