@@ -38,6 +38,7 @@ export class Root extends GameObject {
             // otherwise the events are not yet subscribed on the receiving end.
             events.emit(EventProtocolEnum.ShowMobileOverlay, false, false)
             events.emit(EventProtocolEnum.MQTT_SubscribeToTopic, false, MqttTopics.LOBBY_DISCOVERY);
+            events.emit(EventProtocolEnum.MQTT_SubscribeToTopic, false, MqttTopics.LOBBY_CLOSED);
         }, 1)
     }
 

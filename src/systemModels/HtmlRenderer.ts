@@ -234,6 +234,7 @@ export class HtmlRenderer extends SystemLogic {
         if (!addQueryEventListeners(this._document, "click", ".backButton", () => {
             if (!this._modalMemory["homeMenu"]) return;
             if (this._modalMemory["hostMultiplayerGameModal"]) {
+                events.emit(EventProtocolEnum.CloseLobby, false, memoryService.getLobby());
                 memoryService.setLobby({
                     isActive: false,
                     lobbyIdentifier: '',
@@ -241,7 +242,7 @@ export class HtmlRenderer extends SystemLogic {
                     discoverableLobbyIdentifier: '',
                     players: 1,
                     playing: false
-                })
+                });
             }
             events.emit(EventProtocolEnum.ShowHomeMenu, false, true);
             this.showHomeScreen(true);

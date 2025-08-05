@@ -3,3 +3,8 @@ export interface MQTT_LobbyAnnouncementInterface {
     username: string;
     players: number;
 }
+
+export interface MQTT_LobbyClosingInterface {
+    identifier: string;
+    isClosingBecauseOfStart: boolean;
+}
