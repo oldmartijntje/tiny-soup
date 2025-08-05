@@ -1,7 +1,6 @@
 import {GameObject} from "./GameObject.ts";
 import {Vector2} from "./Vector2.ts";
 import {DrawLayersEnum} from "../types/enum/DrawLayers.enum.ts";
-import {IGameLogicHandler} from "../types/interface/IGameLogicHandler.ts";
 import {GameObjectInterface} from "../types/dto_interface/GameObject.Interface.ts";
 import {HtmlRenderer} from "./HtmlRenderer.ts";
 import {events} from "../services/EventService.ts";
@@ -10,11 +9,11 @@ import {MqttService} from "../services/MqttService.ts";
 import {gameConfig, ViteRunningMode} from "../types/dto_interface/GameConfig.interface.ts";
 import {LobbySystem} from "./LobbySystem.ts";
 import {MqttTopics} from "../types/custom/MqttTopics.ts";
+import {GameClient} from "./GameClient.ts";
 
 export class Root extends GameObject {
     private _htmlRenderer: HtmlRenderer;
-    private _gameClient: null = null;
-    private _gameLogicHandler?: IGameLogicHandler;
+    private _gameClient: GameClient;
     private _lobbySystem: LobbySystem;
     private _mqttService: MqttService;
 
@@ -24,6 +23,8 @@ export class Root extends GameObject {
         this._htmlRenderer = new HtmlRenderer(document);
         this._mqttService = new MqttService();
         this._lobbySystem = new LobbySystem();
+        this._gameClient = new GameClient();
+        this._logger.StringifyObject(this._gameClient).PrependText("Created GameClient: ").LogDebug();
         this._logger.StringifyObject(this._mqttService).PrependText("Created MQTT Service: ").LogDebug();
         this._logger.StringifyObject(this._lobbySystem).PrependText("Created Lobby System: ").LogDebug();
     }

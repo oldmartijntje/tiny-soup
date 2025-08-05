@@ -203,6 +203,7 @@ export class HtmlRenderer extends SystemLogic {
         if (!addEventListener(this._document, "click", "onlineGameSelectJoinMode", (): void => {
             if (!this._modalMemory["homeMenu"] || !this._modalMemory["onlineMultiplayerSelectionModal"]) return;
             events.emit(EventProtocolEnum.SelectMultiplayerModus, false, "Join");
+            events.emit(EventProtocolEnum.OpenDiscoveryScreen);
             memoryService.isHostedGame = false;
             this.prepareShowingOfMenu(true);
             this._modalMemory["joinMultiplayerGameModal"] = true;
