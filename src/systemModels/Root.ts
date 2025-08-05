@@ -15,9 +15,7 @@ export class Root extends GameObject {
     private _htmlRenderer: HtmlRenderer;
     private _gameClient: null = null;
     private _gameLogicHandler?: IGameLogicHandler;
-    // @ts-ignore
     private _lobbySystem: LobbySystem;
-    // @ts-ignore
     private _mqttService: MqttService;
 
     constructor(document: Document, fields?: GameObjectInterface) {
@@ -26,6 +24,8 @@ export class Root extends GameObject {
         this._htmlRenderer = new HtmlRenderer(document);
         this._mqttService = new MqttService();
         this._lobbySystem = new LobbySystem();
+        this._logger.StringifyObject(this._mqttService).PrependText("Created MQTT Service: ").LogDebug();
+        this._logger.StringifyObject(this._lobbySystem).PrependText("Created Lobby System: ").LogDebug();
     }
 
     onInit() {
